@@ -17,23 +17,41 @@ const AdminLogin = () => {
     setLoading(true);
     setError('');
 
+    // Validate inputs
+    const trimmedEmail = email?.trim() ?? '';
+    const trimmedPassword = password ?? '';
+
+    if (!trimmedEmail || !trimmedPassword) {
+      setError('Email and password are required');
+      setLoading(false);
+      return;
+    }
+
+    // Debug logging
+    console.log('Login attempt:', { email: trimmedEmail, password: '***' });
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: trimmedEmail,
+        password: trimmedPassword,
       });
 
       if (error) {
-        setError('Invalid email or password. Please try again.');
+        console.error('Login error:', error);
+        setError(error.message || 'Invalid email or password. Please try again.');
         return;
       }
 
-      if (data.user) {
+      if (data?.user) {
+        console.log('Login successful:', data.user.email);
         // Successful login - redirect to admin dashboard
         navigate('/admin/dashboard');
+      } else {
+        setError('Login failed. Please check your credentials.');
       }
-    } catch (err) {
-      setError('An error occurred. Please try again.');
+    } catch (err: any) {
+      console.error('Login exception:', err);
+      setError(err?.message || 'An unexpected error occurred. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -152,6 +170,22 @@ const AdminLogin = () => {
               <Link to="/" className="text-primary hover:text-primary/80 transition-colors">
                 Back to website
               </Link>
+            </p>
+          </div>
+
+          {/* Admin Setup Help */}
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
+            <p className="text-xs text-blue-800">
+              <strong>First time?</strong> Create an admin user in{' '}
+              <a 
+                href="https://supabase.com/dashboard" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline"
+              >
+                Supabase Dashboard
+              </a>{' '}
+              → Authentication → Users → Invite user
             </p>
           </div>
         </div>
