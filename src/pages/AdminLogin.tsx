@@ -14,8 +14,14 @@ const AdminLogin = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Execution guard - prevent double submit
+    if (loading) return;
+    
     setLoading(true);
     setError('');
+    
+    console.log('LOGIN START');
 
     // Validate inputs
     const trimmedEmail = email?.trim() ?? '';
@@ -27,8 +33,7 @@ const AdminLogin = () => {
       return;
     }
 
-    // Debug logging
-    console.log('Login attempt:', { email: trimmedEmail, password: '***' });
+    console.log('LOGIN INPUTS:', { email: trimmedEmail, password: '***' });
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -37,17 +42,25 @@ const AdminLogin = () => {
       });
 
       if (error) {
-        console.error('Login error:', error);
-        setError(error.message || 'Invalid email or password. Please try again.');
+        console.error('LOGIN ERROR:', error);
+        
+        if (error.message === 'Invalid login credentials') {
+          setError('Email atau password salah');
+        } else {
+          setError(error.message || 'Login gagal');
+        }
+        
         return;
       }
+      
+      console.log('LOGIN RESULT:', { data, error });
 
       if (data?.user) {
-        console.log('Login successful:', data.user.email);
-        // Successful login - redirect to admin dashboard
+        console.log('LOGIN SUCCESS:', data.user.email);
+        setError(''); // Clear any previous error
         navigate('/admin/dashboard');
       } else {
-        setError('Login failed. Please check your credentials.');
+        setError('Login gagal. Silakan periksa kredensial Anda.');
       }
     } catch (err: any) {
       console.error('Login exception:', err);
