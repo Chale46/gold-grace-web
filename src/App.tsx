@@ -19,6 +19,7 @@ import InternalSystem from "./pages/InternalSystem.tsx";
 import AdminLogin from "./pages/AdminLogin.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
 import AdminArticles from "./pages/AdminArticles.tsx";
+import AdminContent from "./pages/AdminContent.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -49,6 +50,11 @@ const App = () => (
                     <Route path="/admin/dashboard" element={
                       <ProtectedRoute>
                         <AdminDashboard />
+                      </ProtectedRoute>
+                    } />
+                    <Route path="/admin/content" element={
+                      <ProtectedRoute>
+                        <AdminContent />
                       </ProtectedRoute>
                     } />
                     <Route path="/admin/articles" element={

@@ -382,6 +382,64 @@ export const api = {
     }
   },
 
+  // Site Content API
+  siteContent: {
+    // Get all site content
+    getAll: async () => {
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('*')
+        .order('key', { ascending: true });
+
+      return { data, error };
+    },
+
+    // Get content by key
+    getByKey: async (key) => {
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('*')
+        .eq('key', key)
+        .single();
+
+      return { data, error };
+    },
+
+    // Update content (upsert)
+    update: async (key, content) => {
+      const { data, error } = await supabase
+        .from('site_content')
+        .upsert({
+          key,
+          content,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'key'
+        })
+        .select()
+        .single();
+
+      return { data, error };
+    },
+
+    // Get content object (for public site)
+    getContentMap: async () => {
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('*');
+
+      if (error) return { data: null, error };
+
+      // Convert array to object keyed by key
+      const contentMap = {};
+      data?.forEach(item => {
+        contentMap[item.key] = item.content;
+      });
+
+      return { data: contentMap, error: null };
+    }
+  },
+
   // Analytics - Web Vitals
   analytics: {
     // Post web vitals data

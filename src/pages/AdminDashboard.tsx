@@ -17,7 +17,8 @@ import {
   FileText,
   LayoutDashboard,
   Menu,
-  X
+  X,
+  Globe
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -156,6 +157,13 @@ const AdminDashboard = () => {
             >
               <LayoutDashboard className="w-5 h-5" />
               Dashboard
+            </Link>
+            <Link
+              to="/admin/content"
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <Globe className="w-5 h-5" />
+              Site Content
             </Link>
             <Link
               to="/admin/articles"
