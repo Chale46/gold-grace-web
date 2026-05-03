@@ -58,6 +58,7 @@ const AdminLogin = () => {
       if (data?.user) {
         console.log('LOGIN SUCCESS:', data.user.email);
         setError(''); // Clear any previous error
+        console.log('NAVIGATING...');
         navigate('/admin/dashboard', { replace: true });
       } else {
         setError('Login gagal. Silakan periksa kredensial Anda.');
