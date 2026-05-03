@@ -18,7 +18,8 @@ const AppWrapper = ({ children }: AppWrapperProps) => {
   useEffect(() => {
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
       // Skip SW registration on admin subdomain to prevent caching issues
-      if (location.hostname !== 'localhost' && !location.hostname.includes('admin1')) {
+      const hostname = location?.hostname ?? '';
+      if (hostname !== 'localhost' && !hostname.includes('admin1')) {
         // disable for now - routing issues with admin subdomain
         console.log('[SW] Registration disabled temporarily');
         // navigator.serviceWorker

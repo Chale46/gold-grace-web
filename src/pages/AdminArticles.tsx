@@ -180,7 +180,7 @@ const AdminArticles = () => {
   };
 
   const filteredArticles = articles.filter(article => {
-    const normalizedSearchTerm = searchTerm.toLowerCase();
+    const normalizedSearchTerm = (searchTerm ?? '').toLowerCase();
     const authorText = article.author || '';
     const excerptText = article.excerpt || '';
     const titleText = article.title || '';
