@@ -95,9 +95,10 @@ export const optimizeLCP = () => {
         }
 
         // Optimize image formats
-        if (img.src && img.src.includes('.jpg') || img.src.includes('.jpeg')) {
+        const src = img.src ?? '';
+        if ((src.includes('.jpg') || src.includes('.jpeg'))) {
           // Consider WebP format for better compression
-          const webpSrc = img.src.replace(/\.(jpg|jpeg)$/i, '.webp');
+          const webpSrc = src.replace(/\.(jpg|jpeg)$/i, '.webp');
           if (supportsWebP()) {
             img.src = webpSrc;
           }
@@ -132,7 +133,8 @@ export const optimizeLCP = () => {
     if (scripts && typeof scripts.forEach === 'function') {
       scripts.forEach(script => {
         const s = script as HTMLScriptElement;
-        if (!s.src.includes('critical') && !s.textContent?.includes('critical')) {
+        const scriptSrc = s.src ?? '';
+        if (!scriptSrc.includes('critical') && !s.textContent?.includes('critical')) {
           s.defer = true;
         }
       });

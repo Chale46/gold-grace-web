@@ -157,7 +157,8 @@ const useABTesting = () => {
     if (test.targetAudience) {
       const { device, location, newUsersOnly } = test.targetAudience;
       
-      if (device && !device.includes(getDeviceType())) {
+      const deviceStr = device ?? '';
+      if (device && !deviceStr.includes(getDeviceType())) {
         return false;
       }
       

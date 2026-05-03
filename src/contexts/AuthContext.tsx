@@ -125,7 +125,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const userPermissions = ROLE_PERMISSIONS[authState.user.role];
     const resourcePermission = userPermissions.find(p => p.resource === resource);
     
-    return resourcePermission?.actions.includes(action as any) || false;
+    const actions = resourcePermission?.actions ?? [];
+    return actions.includes(action as any) || false;
   };
 
   const hasRole = (role: UserRole): boolean => {

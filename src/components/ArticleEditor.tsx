@@ -150,10 +150,12 @@ const ArticleEditor = ({ article, onSave, onCancel, mode }: ArticleEditorProps) 
   };
 
   const addTag = () => {
-    if (tagInput.trim() && !formData.tags.includes(tagInput.trim())) {
+    const trimmedTag = tagInput.trim();
+    const currentTags = formData.tags ?? [];
+    if (trimmedTag && !currentTags.includes(trimmedTag)) {
       setFormData(prev => ({
         ...prev,
-        tags: [...prev.tags, tagInput.trim()]
+        tags: [...(prev.tags ?? []), trimmedTag]
       }));
       setTagInput('');
     }
@@ -162,7 +164,7 @@ const ArticleEditor = ({ article, onSave, onCancel, mode }: ArticleEditorProps) 
   const removeTag = (tagToRemove: string) => {
     setFormData(prev => ({
       ...prev,
-      tags: prev.tags.filter(tag => tag !== tagToRemove)
+      tags: (prev.tags ?? []).filter(tag => tag !== tagToRemove)
     }));
   };
 

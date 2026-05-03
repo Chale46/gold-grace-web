@@ -360,7 +360,8 @@ export const api = {
         return { valid: false, error: 'File size too large' };
       }
       
-      if (!allowedTypes.includes(file.type)) {
+      const fileType = file.type ?? '';
+      if (!allowedTypes.includes(fileType)) {
         return { valid: false, error: 'File type not allowed' };
       }
       
