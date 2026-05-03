@@ -14,17 +14,22 @@ const AppWrapper = ({ children }: AppWrapperProps) => {
   const { trackPageView, trackUserProperties } = useAnalytics();
   const { getCurrentMetrics } = usePerformanceMonitoring();
 
-  // Register service worker
+  // Register service worker (DISABLED FOR NOW - causing routing issues)
   useEffect(() => {
     if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((registration) => {
-          console.log('Service Worker registered successfully:', registration);
-        })
-        .catch((error) => {
-          console.log('Service Worker registration failed:', error);
-        });
+      // Skip SW registration on admin subdomain to prevent caching issues
+      if (location.hostname !== 'localhost' && !location.hostname.includes('admin1')) {
+        // disable for now - routing issues with admin subdomain
+        console.log('[SW] Registration disabled temporarily');
+        // navigator.serviceWorker
+        //   .register('/sw.js')
+        //   .then((registration) => {
+        //     console.log('Service Worker registered successfully:', registration);
+        //   })
+        //   .catch((error) => {
+        //     console.log('Service Worker registration failed:', error);
+        //   });
+      }
     }
   }, []);
 
