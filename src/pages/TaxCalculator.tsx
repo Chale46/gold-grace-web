@@ -11,8 +11,8 @@ const TaxCalculator = () => {
   const { t, language } = useLanguage();
   
   const breadcrumbs = [
-    { name: t('home'), url: 'https://jadtraweb.vercel.app' },
-    { name: t('taxCalculator'), url: 'https://jadtraweb.vercel.app/tax-calculator' },
+    { name: t('home'), url: 'https://jadtraconsulting.com' },
+    { name: t('taxCalculator'), url: 'https://jadtraconsulting.com/tax-calculator' },
   ];
 
   const structuredData = articleSchema(
@@ -28,7 +28,7 @@ const TaxCalculator = () => {
         title={t('taxCalculatorTitle') + " - Gratis & Akurat 2026"}
         description={t('taxCalculatorDescription')}
         keywords="kalkulator PPh 21 2026, hitung PPh 21, PPh 21 online, kalkulator pajak, pajak penghasilan, tax calculator Indonesia"
-        canonical="https://jadtraweb.vercel.app/tax-calculator"
+        canonical="https://jadtraconsulting.com/tax-calculator"
         structuredData={structuredData}
       />
       <Layout>

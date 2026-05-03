@@ -6,7 +6,7 @@
   
   <!-- Homepage -->
   <url>
-    <loc>https://jadtraweb.vercel.app/</loc>
+    <loc>https://jadtraconsulting.com/</loc>
     <lastmod>2026-04-18T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -14,7 +14,7 @@
   
   <!-- About Page -->
   <url>
-    <loc>https://jadtraweb.vercel.app/about</loc>
+    <loc>https://jadtraconsulting.com/about</loc>
     <lastmod>2026-04-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -22,7 +22,7 @@
   
   <!-- Services Page -->
   <url>
-    <loc>https://jadtraweb.vercel.app/services</loc>
+    <loc>https://jadtraconsulting.com/services</loc>
     <lastmod>2026-04-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -30,7 +30,7 @@
   
   <!-- Tax Calculator Page -->
   <url>
-    <loc>https://jadtraweb.vercel.app/tax-calculator</loc>
+    <loc>https://jadtraconsulting.com/tax-calculator</loc>
     <lastmod>2026-04-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -38,7 +38,7 @@
   
   <!-- Contact Page -->
   <url>
-    <loc>https://jadtraweb.vercel.app/contact</loc>
+    <loc>https://jadtraconsulting.com/contact</loc>
     <lastmod>2026-04-18T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -78,7 +78,7 @@
   
   <!-- Blog Page -->
   <url>
-    <loc>https://jadtraweb.vercel.app/blog</loc>
+    <loc>https://jadtraconsulting.com/blog</loc>
     <lastmod>2026-04-18T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>

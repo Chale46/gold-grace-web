@@ -15,7 +15,20 @@
     }
   ],
 
-  
+  "redirects": [
+    {
+      "source": "/",
+      "has": [
+        {
+          "type": "host",
+          "value": "admin1.jadtraconsulting.com"
+        }
+      ],
+      "destination": "/admin",
+      "permanent": false
+    }
+  ],
+
   "headers": [
     {
       "source": "/robots.txt",

@@ -39,7 +39,7 @@ const SEO = ({
   const finalDescription = description || defaultSEO.description;
   const finalKeywords = keywords || defaultSEO.keywords;
   const finalOgImage = ogImage || defaultSEO.ogImage;
-  const finalCanonical = canonical || window.location.href;
+  const finalCanonical = canonical || `https://jadtraconsulting.com${window.location.pathname}`;
 
   const jsonLd = structuredData ? JSON.stringify(structuredData) : null;
 

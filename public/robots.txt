@@ -23,7 +23,7 @@ Allow: /assets/
 Allow: /public/
 
 # Sitemap location
-Sitemap: https://jadtraweb.vercel.app/sitemap.xml
+Sitemap: https://jadtraconsulting.com/sitemap.xml
 
 # Major search engines
 User-agent: Googlebot

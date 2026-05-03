@@ -43,13 +43,13 @@ export const optimizeFCP = () => {
     // Add connection hints for faster DNS resolution
     const dnsPrefetch = document.createElement('link');
     dnsPrefetch.rel = 'dns-prefetch';
-    dnsPrefetch.href = 'https://gold-grace-web.vercel.app';
+    dnsPrefetch.href = 'https://jadtraconsulting.com';
     document.head.appendChild(dnsPrefetch);
 
     // Add preconnect for critical domains
     const preconnect = document.createElement('link');
     preconnect.rel = 'preconnect';
-    preconnect.href = 'https://gold-grace-web.vercel.app';
+    preconnect.href = 'https://jadtraconsulting.com';
     document.head.appendChild(preconnect);
   };
 

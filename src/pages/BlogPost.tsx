@@ -244,12 +244,12 @@ const BlogPost = () => {
   );
 
   const breadcrumbs = [
-    { name: 'Home', url: 'https://jadtraweb.vercel.app' },
-    { name: 'Blog', url: 'https://jadtraweb.vercel.app/blog' },
-    { name: post.title, url: `https://jadtraweb.vercel.app/blog/${post.id}` },
+    { name: 'Home', url: 'https://jadtraconsulting.com' },
+    { name: 'Blog', url: 'https://jadtraconsulting.com/blog' },
+    { name: post.title, url: `https://jadtraconsulting.com/blog/${post.id}` },
   ];
 
-  const shareUrl = `https://jadtraweb.vercel.app/blog/${post.id}`;
+  const shareUrl = `https://jadtraconsulting.com/blog/${post.id}`;
 
   return (
     <>
