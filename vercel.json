@@ -1,7 +1,7 @@
 {
   "routes": [
     {
-      "src": "/",
+      "src": "/(.*)",
       "has": [
         { "type": "host", "value": "admin1.jadtraconsulting.com" }
       ],
@@ -11,6 +11,14 @@
     {
       "src": "/api/(.*)",
       "dest": "/api/$1"
+    },
+    {
+      "src": "/assets/(.*)",
+      "dest": "/assets/$1"
+    },
+    {
+      "src": "/(.*\\.(js|css|png|jpg|jpeg|svg|ico|webp))",
+      "dest": "/$1"
     },
     {
       "src": "/(.*)",
