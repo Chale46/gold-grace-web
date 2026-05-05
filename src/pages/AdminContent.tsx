@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import AdminLayout from '@/components/admin/AdminLayout';
+import RichTextEditor from '@/components/RichTextEditor';
 import { 
   Save,
   AlertCircle,
@@ -11,7 +12,7 @@ import {
 
 interface SiteContent {
   key: string;
-  content: string;
+  value: string;
   updated_at: string;
 }
 
@@ -170,14 +171,13 @@ const AdminContent = () => {
                 Header Content
                 <span className="text-gray-500 text-xs ml-2">(shown at top of all pages)</span>
               </label>
-              <textarea
-                value={header}
-                onChange={(e) => setHeader(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter header content here... (HTML supported)"
+              <RichTextEditor
+                content={header}
+                onChange={setHeader}
+                placeholder="Enter header content here..."
+                height="150px"
               />
-              <p className="text-xs text-gray-500 mt-2">Supports HTML. Leave empty to use default header.</p>
+              <p className="text-xs text-gray-500 mt-2">Rich text editor. Leave empty to use default header.</p>
             </div>
 
             {/* Body Section */}
@@ -186,14 +186,13 @@ const AdminContent = () => {
                 Body/Main Content
                 <span className="text-gray-500 text-xs ml-2">(main page content)</span>
               </label>
-              <textarea
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                rows={8}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter main content here... (HTML supported)"
+              <RichTextEditor
+                content={body}
+                onChange={setBody}
+                placeholder="Enter main content here..."
+                height="300px"
               />
-              <p className="text-xs text-gray-500 mt-2">Supports HTML. This content will be injected into the main content area.</p>
+              <p className="text-xs text-gray-500 mt-2">Rich text editor. This content will be injected into the main content area.</p>
             </div>
 
             {/* Footer Section */}
@@ -202,14 +201,13 @@ const AdminContent = () => {
                 Footer Content
                 <span className="text-gray-500 text-xs ml-2">(shown at bottom of all pages)</span>
               </label>
-              <textarea
-                value={footer}
-                onChange={(e) => setFooter(e.target.value)}
-                rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Enter footer content here... (HTML supported)"
+              <RichTextEditor
+                content={footer}
+                onChange={setFooter}
+                placeholder="Enter footer content here..."
+                height="150px"
               />
-              <p className="text-xs text-gray-500 mt-2">Supports HTML. Leave empty to use default footer.</p>
+              <p className="text-xs text-gray-500 mt-2">Rich text editor. Leave empty to use default footer.</p>
             </div>
           </div>
 
