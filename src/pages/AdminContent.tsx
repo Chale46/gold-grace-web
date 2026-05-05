@@ -113,40 +113,41 @@ const AdminContent = () => {
             <h1 className="text-2xl font-bold text-gray-900">Site Content</h1>
             <p className="text-gray-500 mt-1">Manage website header, body, and footer</p>
           </div>
-            <div className="flex gap-3">
-              <button
-                onClick={handlePreview}
-                className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <Eye className="w-4 h-4" />
-                Preview Site
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
-              >
-                {saving ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    Save Changes
-                  </>
-                )}
-              </button>
-            </div>
+          <div className="flex gap-3">
+            <button
+              onClick={handlePreview}
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Eye className="w-4 h-4" />
+              Preview Site
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Save Changes
+                </>
+              )}
+            </button>
           </div>
+        </div>
+      </div>
 
-          {loading ? (
-            <div className="flex items-center justify-center h-64">
-              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          ) : (
-            <>
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      ) : (
+        <>
           {/* Error Message */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
@@ -214,17 +215,17 @@ const AdminContent = () => {
           </div>
 
           {/* Quick Tips */}
-              <div className="mt-8 bg-blue-50 rounded-lg p-6">
-                <h3 className="text-sm font-semibold text-blue-900 mb-2">Tips</h3>
-                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-                  <li>Use HTML tags for formatting (e.g., &lt;strong&gt;, &lt;em&gt;, &lt;br&gt;)</li>
-                  <li>Leave fields empty to use default content</li>
-                  <li>Click "Preview Site" to see changes on the public website</li>
-                  <li>Don't forget to click "Save Changes" when done editing</li>
-                </ul>
-              </div>
-            </>
-          )}
+          <div className="mt-8 bg-blue-50 rounded-lg p-6">
+            <h3 className="text-sm font-semibold text-blue-900 mb-2">Tips</h3>
+            <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+              <li>Use HTML tags for formatting (e.g., &lt;strong&gt;, &lt;em&gt;, &lt;br&gt;)</li>
+              <li>Leave fields empty to use default content</li>
+              <li>Click "Preview Site" to see changes on the public website</li>
+              <li>Don't forget to click "Save Changes" when done editing</li>
+            </ul>
+          </div>
+        </>
+      )}
     </AdminLayout>
   );
 };
