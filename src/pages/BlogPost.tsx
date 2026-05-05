@@ -323,8 +323,9 @@ const BlogPost = () => {
               
               <div 
                 className="prose prose-lg max-w-none text-foreground"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+              >
+                {post.content}
+              </div>
               
               <div className="mt-12 pt-8 border-t border-border">
                 <div className="flex flex-wrap gap-2 mb-8">

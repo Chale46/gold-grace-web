@@ -14,25 +14,48 @@ import { createSafeHTML } from "@/utils/xsProtection";
 import { organizationSchema, localBusinessSchema, websiteSchema } from "@/utils/structuredData";
 
 interface SiteContent {
-  hero_title?: string;
-  hero_subtitle?: string;
-  footer_company?: string;
-  footer_email?: string;
-  footer_phone?: string;
-  footer_address?: string;
+  // 🔝 HEADER / NAVIGATION
+  site_title?: string;
   nav_home?: string;
   nav_about?: string;
   nav_services?: string;
+  nav_blog?: string;
+  nav_tax?: string;
   nav_contact?: string;
-  contact_email?: string;
-  contact_phone?: string;
-  contact_address?: string;
-  social_linkedin?: string;
-  social_facebook?: string;
-  social_instagram?: string;
-  company_name?: string;
-  company_tagline?: string;
-  company_description?: string;
+
+  // 🏠 HERO SECTION
+  hero_badge?: string;
+  hero_title?: string;
+  hero_subtitle?: string;
+  cta_primary?: string;
+  cta_secondary?: string;
+
+  // 📊 STATISTICS
+  stat_exp?: string;
+  stat_clients?: string;
+  stat_satisfaction?: string;
+  stat_support?: string;
+
+  // 🏢 ABOUT SECTION
+  about_text?: string;
+
+  // 🧩 SERVICES SECTION
+  services_title?: string;
+  service_1_title?: string;
+  service_1_desc?: string;
+  service_2_title?: string;
+  service_2_desc?: string;
+  service_3_title?: string;
+  service_3_desc?: string;
+  service_4_title?: string;
+  service_4_desc?: string;
+
+  // 🦶 FOOTER SECTION
+  footer_company?: string;
+  footer_email?: string;
+  footer_phone?: string;
+  footer_location?: string;
+  footer_copyright?: string;
 }
 
 const Index = () => {
@@ -109,7 +132,7 @@ const Index = () => {
           <FadeIn>
             <div className="text-center max-w-4xl mx-auto">
               <p className="text-sm uppercase tracking-widest text-muted-foreground mb-4">
-                Trusted by 500+ Companies
+                {content.hero_badge || 'Trusted by 500+ Companies'}
               </p>
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-foreground mb-8 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent drop-shadow-lg">
                 {content.hero_title || 'Trusted Consulting Partner for Business Growth'}
@@ -123,13 +146,13 @@ const Index = () => {
                   to="/contact"
                   className="px-6 py-3 rounded-xl bg-primary text-white font-medium hover:bg-primary/90 transition-colors duration-200"
                 >
-                  Consult Now
+                  {content.cta_primary || 'Consult Now'}
                 </Link>
                 <Link
                   to="/tax-calculator"
-                  className="px-6 py-3 rounded-xl border border-border hover:border-primary transition-colors duration-200"
+                  className="px-6 py-3 rounded-xl bg-secondary text-secondary-foreground font-medium hover:bg-secondary/90 transition-colors duration-200"
                 >
-                  Tax Calculator
+                  {content.cta_secondary || 'Tax Calculator'}
                 </Link>
               </div>
 

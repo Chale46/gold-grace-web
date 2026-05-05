@@ -39,8 +39,9 @@ export default function BlogDetail() {
 
       <div
         style={{ marginTop: 16 }}
-        dangerouslySetInnerHTML={{ __html: article.content }}
-      />
+      >
+        {article.content}
+      </div>
     </div>
   )
 }
