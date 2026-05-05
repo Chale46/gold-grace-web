@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Layout from "@/components/Layout"
 import FadeIn from "@/components/FadeIn"
 import SEO from "@/components/SEO"
-import { api } from "../lib/api"
+import { supabase } from "@/lib/supabase"
 import { useLanguage } from "@/contexts/LanguageContext"
 
 export default function Blog() {
@@ -13,7 +13,12 @@ export default function Blog() {
   useEffect(() => {
     const loadArticles = async () => {
       try {
-        const { data, error } = await api.articles.getPublished()
+        const { data, error } = await supabase
+          .from('articles')
+          .select('*')
+          .eq('status', 'published')
+          .order('created_at', { ascending: false })
+        
         if (error) {
           console.error('Error loading articles:', error)
         } else {

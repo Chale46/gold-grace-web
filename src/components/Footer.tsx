@@ -1,11 +1,13 @@
 import { Link } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useSiteContent } from "@/components/SiteContentProvider";
 import jadtraLogo from "@/assets/jadtra-logo.jpg";
 
 const Footer = () => {
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const { content } = useSiteContent();
 
   const navItems = [
     { label: t("nav.home"), path: "/" },
@@ -57,7 +59,11 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t mt-12 pt-8 text-center text-xs border-border text-muted-foreground">
-          © {new Date().getFullYear()} JADTRA Consulting. {t("footer.rights")}
+          {content.footer_html ? (
+            <div dangerouslySetInnerHTML={{ __html: content.footer_html }} />
+          ) : (
+            `© ${new Date().getFullYear()} JADTRA Consulting. ${t("footer.rights")}`
+          )}
         </div>
       </div>
     </footer>

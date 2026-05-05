@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { SiteContentProvider } from "@/components/SiteContentProvider";
 import AppWrapper from "./AppWrapper";
 import Index from "./pages/Index.tsx";
 import About from "./pages/About.tsx";
@@ -32,43 +33,45 @@ const App = () => (
       <AuthProvider>
         <ThemeProvider>
           <LanguageProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
-                <AppWrapper>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/about" element={<About />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route path="/contact" element={<Contact />} />
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/blog/:postId" element={<BlogPost />} />
-                    <Route path="/tax-calculator" element={<TaxCalculator />} />
-                    <Route path="/internal" element={<InternalSystem />} />
-                    <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
-                    <Route path="/admin/setup" element={<AdminSetup />} />
-                    <Route path="/admin/login" element={<AdminLogin />} />
-                    <Route path="/admin/dashboard" element={
-                      <ProtectedRoute>
-                        <AdminDashboard />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin/content" element={
-                      <ProtectedRoute>
-                        <AdminContent />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="/admin/articles" element={
-                      <ProtectedRoute>
-                        <AdminArticles />
-                      </ProtectedRoute>
-                    } />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </AppWrapper>
-              </BrowserRouter>
-            </TooltipProvider>
+            <SiteContentProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <BrowserRouter>
+                  <AppWrapper>
+                    <Routes>
+                      <Route path="/" element={<Index />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/services" element={<Services />} />
+                      <Route path="/contact" element={<Contact />} />
+                      <Route path="/blog" element={<Blog />} />
+                      <Route path="/blog/:postId" element={<BlogPost />} />
+                      <Route path="/tax-calculator" element={<TaxCalculator />} />
+                      <Route path="/internal" element={<InternalSystem />} />
+                      <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+                      <Route path="/admin/setup" element={<AdminSetup />} />
+                      <Route path="/admin/login" element={<AdminLogin />} />
+                      <Route path="/admin/dashboard" element={
+                        <ProtectedRoute>
+                          <AdminDashboard />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin/content" element={
+                        <ProtectedRoute>
+                          <AdminContent />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin/articles" element={
+                        <ProtectedRoute>
+                          <AdminArticles />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </AppWrapper>
+                </BrowserRouter>
+              </TooltipProvider>
+            </SiteContentProvider>
           </LanguageProvider>
         </ThemeProvider>
       </AuthProvider>

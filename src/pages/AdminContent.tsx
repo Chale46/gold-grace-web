@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { api } from '@/lib/api';
+import { supabase } from '@/lib/supabase';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { 
   Save,
@@ -33,24 +33,26 @@ const AdminContent = () => {
   const loadContent = async () => {
     try {
       setLoading(true);
-      const { data, error } = await api.siteContent.getAll();
+      const { data, error } = await supabase
+        .from('site_content')
+        .select('*')
+        .order('key', { ascending: true });
 
       if (error) {
         console.error('Error loading content:', error);
-        // If table doesn't exist, use defaults
-        setError('Database table not found. Please create site_content table in Supabase.');
+        setError('Failed to load content from database');
       } else {
-        // Parse content into state
+        // Parse content into state using correct keys
         data?.forEach((item: SiteContent) => {
           switch (item.key) {
-            case 'header':
-              setHeader(item.content || '');
+            case 'header_html':
+              setHeader(item.value || '');
               break;
-            case 'body':
-              setBody(item.content || '');
+            case 'homepage_content':
+              setBody(item.value || '');
               break;
-            case 'footer':
-              setFooter(item.content || '');
+            case 'footer_html':
+              setFooter(item.value || '');
               break;
           }
         });
@@ -69,11 +71,43 @@ const AdminContent = () => {
     setSuccess('');
 
     try {
-      // Save all three sections
+      // Save all three sections using correct keys
       const promises = [
-        api.siteContent.update('header', header),
-        api.siteContent.update('body', body),
-        api.siteContent.update('footer', footer)
+        supabase
+          .from('site_content')
+          .upsert({
+            key: 'header_html',
+            value: header,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'key'
+          })
+          .select()
+          .single(),
+        
+        supabase
+          .from('site_content')
+          .upsert({
+            key: 'homepage_content',
+            value: body,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'key'
+          })
+          .select()
+          .single(),
+        
+        supabase
+          .from('site_content')
+          .upsert({
+            key: 'footer_html',
+            value: footer,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'key'
+          })
+          .select()
+          .single()
       ];
 
       const results = await Promise.all(promises);
@@ -84,7 +118,7 @@ const AdminContent = () => {
         setError('Some content failed to save. Please check console.');
         results.forEach((result, index) => {
           if (result.error) {
-            console.error(`Error saving ${['header', 'body', 'footer'][index]}:`, result.error);
+            console.error(`Error saving ${['header_html', 'homepage_content', 'footer_html'][index]}:`, result.error);
           }
         });
       } else {
