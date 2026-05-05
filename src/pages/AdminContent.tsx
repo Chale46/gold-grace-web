@@ -66,19 +66,22 @@ const AdminContent = () => {
     }
   };
 
-  const handleSave = async () => {
+  const sanitize = (html: string) =>
+  html.replace(/<script.*?>.*?<\/script>/gi, '')
+
+const handleSave = async () => {
     setSaving(true);
     setError('');
     setSuccess('');
 
     try {
-      // Save all sections using proper upsert array format
+      // Save all sections using proper upsert array format with sanitized values
       const { data, error } = await supabase
         .from('site_content')
         .upsert([
-          { key: 'header_html', value: header },
-          { key: 'homepage_content', value: body },
-          { key: 'footer_html', value: footer }
+          { key: 'header_html', value: sanitize(header) },
+          { key: 'homepage_content', value: sanitize(body) },
+          { key: 'footer_html', value: sanitize(footer) }
         ], {
           onConflict: 'key'
         })
