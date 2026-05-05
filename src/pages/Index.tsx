@@ -225,7 +225,7 @@ const Index = () => {
           <FadeIn>
             <div className="text-center mb-20">
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">{t("home.howWeWork.title")}</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t("home.howWeWork.subtitle")}</p>
+              {/* subtitle dihapus */}
               <div className="gold-divider mx-auto mt-8" />
             </div>
           </FadeIn>
@@ -258,7 +258,7 @@ const Index = () => {
           <FadeIn>
             <div className="text-center mb-20">
               <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">{t("home.trust.title")}</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">{t("home.trust.subtitle")}</p>
+              {/* subtitle dihapus */}
               <div className="gold-divider mx-auto mt-8" />
             </div>
           </FadeIn>
