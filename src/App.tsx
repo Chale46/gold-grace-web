@@ -20,6 +20,7 @@ import AdminLogin from "./pages/AdminLogin.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
 import AdminArticles from "./pages/AdminArticles.tsx";
 import AdminContent from "./pages/AdminContent.tsx";
+import AdminSetup from "./pages/AdminSetup.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound.tsx";
 
@@ -46,6 +47,7 @@ const App = () => (
                     <Route path="/tax-calculator" element={<TaxCalculator />} />
                     <Route path="/internal" element={<InternalSystem />} />
                     <Route path="/admin" element={<Navigate to="/admin/login" replace />} />
+                    <Route path="/admin/setup" element={<AdminSetup />} />
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin/dashboard" element={
                       <ProtectedRoute>
