@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Briefcase, Calculator, Monitor, Settings, Award, ShieldCheck, TrendingUp,
   MessageSquare, Search, Rocket, BarChart3, Lock, Workflow, Handshake,
@@ -8,13 +9,37 @@ import Layout from "@/components/Layout";
 import FadeIn from "@/components/FadeIn";
 import SEO from "@/components/SEO";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { useSiteContent } from "@/components/SiteContentProvider";
+import { supabase } from "@/lib/supabase";
 import { createSafeHTML } from "@/utils/xsProtection";
 import { organizationSchema, localBusinessSchema, websiteSchema } from "@/utils/structuredData";
 
+interface SiteContent {
+  header_html?: string;
+  homepage_content?: string;
+  footer_html?: string;
+  site_title?: string;
+}
+
 const Index = () => {
   const { t, lang } = useLanguage();
-  const { content, loading, error } = useSiteContent();
+  const [content, setContent] = useState<SiteContent>({});
+
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase
+        .from('site_content')
+        .select('*')
+
+      const map: SiteContent = {}
+      data.forEach(item => {
+        map[item.key as keyof SiteContent] = item.value
+      })
+
+      setContent(map)
+    }
+
+    load()
+  }, [])
 
   const services = [
     { icon: Briefcase, title: t("home.services.business.title"), desc: t("home.services.business.desc") },

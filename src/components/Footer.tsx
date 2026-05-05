@@ -1,14 +1,39 @@
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useSiteContent } from "@/components/SiteContentProvider";
+import { supabase } from "@/lib/supabase";
 import { createSafeHTML } from "@/utils/xsProtection";
 import jadtraLogo from "@/assets/jadtra-logo.jpg";
+
+interface SiteContent {
+  header_html?: string;
+  homepage_content?: string;
+  footer_html?: string;
+  site_title?: string;
+}
 
 const Footer = () => {
   const { t } = useLanguage();
   const { theme } = useTheme();
-  const { content } = useSiteContent();
+  const [content, setContent] = useState<SiteContent>({});
+
+  useEffect(() => {
+    const load = async () => {
+      const { data } = await supabase
+        .from('site_content')
+        .select('*')
+
+      const map: SiteContent = {}
+      data.forEach(item => {
+        map[item.key as keyof SiteContent] = item.value
+      })
+
+      setContent(map)
+    }
+
+    load()
+  }, [])
 
   const navItems = [
     { label: t("nav.home"), path: "/" },
