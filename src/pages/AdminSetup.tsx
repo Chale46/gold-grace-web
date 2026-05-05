@@ -46,7 +46,7 @@ const AdminSetup = () => {
       if (mode === 'reset') {
         // Reset password untuk user yang sudah ada
         const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-          redirectTo: window.location.origin + '/admin/login',
+          redirectTo: 'https://jadtraconsulting.com/admin/login',
         });
         
         if (resetError) {
