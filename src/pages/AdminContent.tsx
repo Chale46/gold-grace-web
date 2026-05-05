@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import AdminLayout from '@/components/admin/AdminLayout';
-import RichTextEditor from '@/components/RichTextEditor';
+import RichEditor from '@/components/editor/RichEditor';
 import { 
   Save,
   AlertCircle,
@@ -171,11 +171,9 @@ const AdminContent = () => {
                 Header Content
                 <span className="text-gray-500 text-xs ml-2">(shown at top of all pages)</span>
               </label>
-              <RichTextEditor
-                content={header}
+              <RichEditor
+                value={header}
                 onChange={setHeader}
-                placeholder="Enter header content here..."
-                height="150px"
               />
               <p className="text-xs text-gray-500 mt-2">Rich text editor. Leave empty to use default header.</p>
             </div>
@@ -186,11 +184,9 @@ const AdminContent = () => {
                 Body/Main Content
                 <span className="text-gray-500 text-xs ml-2">(main page content)</span>
               </label>
-              <RichTextEditor
-                content={body}
+              <RichEditor
+                value={body}
                 onChange={setBody}
-                placeholder="Enter main content here..."
-                height="300px"
               />
               <p className="text-xs text-gray-500 mt-2">Rich text editor. This content will be injected into the main content area.</p>
             </div>
@@ -201,11 +197,9 @@ const AdminContent = () => {
                 Footer Content
                 <span className="text-gray-500 text-xs ml-2">(shown at bottom of all pages)</span>
               </label>
-              <RichTextEditor
-                content={footer}
+              <RichEditor
+                value={footer}
                 onChange={setFooter}
-                placeholder="Enter footer content here..."
-                height="150px"
               />
               <p className="text-xs text-gray-500 mt-2">Rich text editor. Leave empty to use default footer.</p>
             </div>
