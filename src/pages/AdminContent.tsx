@@ -71,56 +71,21 @@ const AdminContent = () => {
     setSuccess('');
 
     try {
-      // Save all three sections using correct keys
-      const promises = [
-        supabase
-          .from('site_content')
-          .upsert({
-            key: 'header_html',
-            value: header,
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'key'
-          })
-          .select()
-          .single(),
-        
-        supabase
-          .from('site_content')
-          .upsert({
-            key: 'homepage_content',
-            value: body,
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'key'
-          })
-          .select()
-          .single(),
-        
-        supabase
-          .from('site_content')
-          .upsert({
-            key: 'footer_html',
-            value: footer,
-            updated_at: new Date().toISOString()
-          }, {
-            onConflict: 'key'
-          })
-          .select()
-          .single()
-      ];
+      // Save all sections using proper upsert array format
+      const { data, error } = await supabase
+        .from('site_content')
+        .upsert([
+          { key: 'header_html', value: header },
+          { key: 'homepage_content', value: body },
+          { key: 'footer_html', value: footer }
+        ], {
+          onConflict: 'key'
+        })
+        .select();
 
-      const results = await Promise.all(promises);
-      
-      const hasError = results.some(result => result.error);
-      
-      if (hasError) {
-        setError('Some content failed to save. Please check console.');
-        results.forEach((result, index) => {
-          if (result.error) {
-            console.error(`Error saving ${['header_html', 'homepage_content', 'footer_html'][index]}:`, result.error);
-          }
-        });
+      if (error) {
+        console.error('Save error:', error);
+        setError('Failed to save content');
       } else {
         setSuccess('Content saved successfully!');
         // Clear success after 3 seconds
