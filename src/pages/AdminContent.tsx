@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
 import { api } from '@/lib/api';
+import AdminLayout from '@/components/admin/AdminLayout';
 import { 
-  LayoutDashboard,
-  FileText,
   Save,
-  LogOut,
   AlertCircle,
   CheckCircle,
   Loader2,
-  Eye,
-  Globe
+  Eye
 } from 'lucide-react';
 
 interface SiteContent {
@@ -20,7 +16,6 @@ interface SiteContent {
 }
 
 const AdminContent = () => {
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -31,31 +26,8 @@ const AdminContent = () => {
   const [body, setBody] = useState('');
   const [footer, setFooter] = useState('');
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    // Get current session
-    const getCurrentUser = async () => {
-      const { session, error } = await api.auth.getCurrentSession();
-      
-      if (session) {
-        setUser(session.user);
-        loadContent();
-      }
-    };
-
-    getCurrentUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = api.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        setUser(session.user);
-      } else {
-        setUser(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    loadContent();
   }, []);
 
   const loadContent = async () => {
@@ -128,99 +100,19 @@ const AdminContent = () => {
     }
   };
 
-  const handleLogout = async () => {
-    const { error } = await api.auth.signOut();
-    if (error) {
-      console.error('Logout error:', error);
-    }
-    navigate('/admin/login');
-  };
-
   const handlePreview = () => {
     window.open('/', '_blank');
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading content...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg lg:static lg:inset-0">
-        <div className="flex flex-col h-full">
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-6 border-b">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <LayoutDashboard className="w-5 h-5 text-white" />
-              </div>
-              <span className="ml-3 text-xl font-bold text-foreground">Admin</span>
-            </div>
+    <AdminLayout>
+      {/* Page Header */}
+      <div className="mb-8">
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Site Content</h1>
+            <p className="text-gray-500 mt-1">Manage website header, body, and footer</p>
           </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
-            <Link
-              to="/admin/dashboard"
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <LayoutDashboard className="w-5 h-5" />
-              Dashboard
-            </Link>
-            <Link
-              to="/admin/content"
-              className="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-lg"
-            >
-              <Globe className="w-5 h-5" />
-              Site Content
-            </Link>
-            <Link
-              to="/admin/articles"
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <FileText className="w-5 h-5" />
-              Articles
-            </Link>
-          </nav>
-
-          {/* Sidebar Footer */}
-          <div className="p-4 border-t">
-            <div className="flex items-center gap-3 px-4 py-2 mb-2">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">
-                  {user?.email}
-                </p>
-                <p className="text-xs text-gray-500">Administrator</p>
-              </div>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b">
-          <div className="px-8 py-6 flex justify-between items-center">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Site Content</h1>
-              <p className="text-sm text-gray-500 mt-1">Manage website content sections</p>
-            </div>
             <div className="flex gap-3">
               <button
                 onClick={handlePreview}
@@ -248,10 +140,13 @@ const AdminContent = () => {
               </button>
             </div>
           </div>
-        </header>
 
-        {/* Main Content Form */}
-        <main className="p-8">
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : (
+            <>
           {/* Error Message */}
           {error && (
             <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center gap-3">
@@ -319,18 +214,18 @@ const AdminContent = () => {
           </div>
 
           {/* Quick Tips */}
-          <div className="mt-8 bg-blue-50 rounded-lg p-6">
-            <h3 className="text-sm font-semibold text-blue-900 mb-2">Tips</h3>
-            <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
-              <li>Use HTML tags for formatting (e.g., &lt;strong&gt;, &lt;em&gt;, &lt;br&gt;)</li>
-              <li>Leave fields empty to use default content</li>
-              <li>Click "Preview Site" to see changes on the public website</li>
-              <li>Don't forget to click "Save Changes" when done editing</li>
-            </ul>
-          </div>
-        </main>
-      </div>
-    </div>
+              <div className="mt-8 bg-blue-50 rounded-lg p-6">
+                <h3 className="text-sm font-semibold text-blue-900 mb-2">Tips</h3>
+                <ul className="text-sm text-blue-800 space-y-1 list-disc list-inside">
+                  <li>Use HTML tags for formatting (e.g., &lt;strong&gt;, &lt;em&gt;, &lt;br&gt;)</li>
+                  <li>Leave fields empty to use default content</li>
+                  <li>Click "Preview Site" to see changes on the public website</li>
+                  <li>Don't forget to click "Save Changes" when done editing</li>
+                </ul>
+              </div>
+            </>
+          )}
+    </AdminLayout>
   );
 };
 

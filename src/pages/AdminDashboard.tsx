@@ -1,30 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { api } from '@/lib/api';
+import AdminLayout from '@/components/admin/AdminLayout';
 import { 
-  BarChart3, 
-  Users, 
   MessageSquare, 
-  Calculator, 
-  LogOut, 
-  Settings,
+  Calculator,
   TrendingUp,
   Mail,
-  Phone,
-  Clock,
-  CheckCircle,
-  AlertCircle,
   FileText,
-  LayoutDashboard,
-  Menu,
-  X,
-  Globe
+  Settings
 } from 'lucide-react';
 
 const AdminDashboard = () => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [stats, setStats] = useState({
     totalContacts: 0,
     totalCalculations: 0,
@@ -33,8 +20,7 @@ const AdminDashboard = () => {
     recentCalculations: [],
     recentArticles: []
   });
-
-  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   const formatDateSafe = (dateValue?: string) => {
     if (!dateValue) return '-';
@@ -43,193 +29,75 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    // Get current session (ProtectedRoute ensures user is authenticated)
-    const getCurrentUser = async () => {
-      const { session, error } = await api.auth.getCurrentSession();
-      
-      if (session) {
-        setUser(session.user);
-        loadDashboardData();
+    const loadDashboardData = async () => {
+      try {
+        // Load recent articles
+        const { data: articles, error: articlesError } = await api.articles.getAll({ limit: 5 });
+
+        // Load recent contacts
+        const { data: contacts, error: contactsError } = await api.contacts.getAll({ limit: 5 });
+
+        // Load recent calculations
+        const { data: calculations, error: calculationsError } = await api.taxCalculator.getAll({ limit: 5 });
+
+        if (!articlesError && articles) {
+          setStats(prev => ({
+            ...prev,
+            totalArticles: articles.length,
+            recentArticles: articles
+          }));
+        }
+
+        if (!contactsError && contacts) {
+          setStats(prev => ({
+            ...prev,
+            totalContacts: contacts.length,
+            recentContacts: contacts
+          }));
+        }
+
+        if (!calculationsError && calculations) {
+          setStats(prev => ({
+            ...prev,
+            totalCalculations: calculations.length,
+            recentCalculations: calculations
+          }));
+        }
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    getCurrentUser();
-
-    // Listen for auth changes
-    const { data: { subscription } } = api.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        setUser(session.user);
-      } else {
-        // ProtectedRoute will handle redirect
-        setUser(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
+    loadDashboardData();
   }, []);
-
-  const loadDashboardData = async () => {
-    try {
-      // Load recent articles
-      const { data: articles, error: articlesError } = await api.articles.getAll({ limit: 5 });
-
-      // Load recent contacts
-      const { data: contacts, error: contactsError } = await api.contacts.getAll({ limit: 5 });
-
-      // Load recent calculations
-      const { data: calculations, error: calculationsError } = await api.taxCalculator.getAll({ limit: 5 });
-
-      if (!articlesError && articles) {
-        setStats(prev => ({
-          ...prev,
-          totalArticles: articles.length,
-          recentArticles: articles
-        }));
-      }
-
-      if (!contactsError && contacts) {
-        setStats(prev => ({
-          ...prev,
-          totalContacts: contacts.length,
-          recentContacts: contacts
-        }));
-      }
-
-      if (!calculationsError && calculations) {
-        setStats(prev => ({
-          ...prev,
-          totalCalculations: calculations.length,
-          recentCalculations: calculations
-        }));
-      }
-    } catch (error) {
-      console.error('Error loading dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    const { error } = await api.auth.signOut();
-    if (error) {
-      console.error('Logout error:', error);
-    }
-    navigate('/admin/login');
-  };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading dashboard...</p>
+      <AdminLayout>
+        <div className="flex items-center justify-center h-64">
+          <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
         </div>
-      </div>
+      </AdminLayout>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
-        <div className="flex flex-col h-full">
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-6 border-b">
-            <div className="flex items-center">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <LayoutDashboard className="w-5 h-5 text-white" />
-              </div>
-              <span className="ml-3 text-xl font-bold text-foreground">Admin</span>
-            </div>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 rounded-lg hover:bg-gray-100"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-2">
-            <Link
-              to="/admin/dashboard"
-              className="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-lg"
-            >
-              <LayoutDashboard className="w-5 h-5" />
-              Dashboard
-            </Link>
-            <Link
-              to="/admin/content"
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <Globe className="w-5 h-5" />
-              Site Content
-            </Link>
-            <Link
-              to="/admin/articles"
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <FileText className="w-5 h-5" />
-              Articles
-            </Link>
-          </nav>
-
-          {/* Sidebar Footer */}
-          <div className="p-4 border-t">
-            <div className="flex items-center gap-3 px-4 py-2">
-              <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                <User className="w-4 h-4 text-gray-600" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">
-                  {user?.email}
-                </p>
-                <p className="text-xs text-gray-500">Administrator</p>
-              </div>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-3 w-full px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              Logout
-            </button>
-          </div>
-        </div>
+    <AdminLayout>
+      {/* Page Header */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
+        <p className="text-gray-500 mt-1">Overview of your website activity</p>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 lg:ml-0">
-        {/* Header */}
-        <header className="bg-white shadow-sm border-b lg:hidden">
-          <div className="flex items-center justify-between p-4">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="p-2 rounded-lg hover:bg-gray-100"
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-            <h1 className="text-lg font-semibold text-foreground">Dashboard</h1>
-            <div className="w-9"></div>
-          </div>
-        </header>
-
-        {/* Desktop Header */}
-        <header className="bg-white shadow-sm border-b hidden lg:block">
-          <div className="px-8 py-6">
-            <h1 className="text-2xl font-bold text-foreground">Dashboard</h1>
-            <p className="text-sm text-gray-500 mt-1">Welcome back, {user?.email}</p>
-          </div>
-        </header>
-
-        {/* Main Content */}
-        <main className="p-4 lg:p-8">
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white rounded-lg shadow p-6">
-              <div className="flex items-center">
-                <div className="flex-shrink-0">
-                  <FileText className="w-8 h-8 text-blue-600" />
+      {/* Content */}
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <FileText className="w-8 h-8 text-blue-600" />
                 </div>
                 <div className="ml-4">
                   <h3 className="text-lg font-medium text-foreground">Total Articles</h3>
@@ -401,9 +269,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           </div>
-        </main>
-      </div>
-    </div>
+    </AdminLayout>
   );
 };
 
