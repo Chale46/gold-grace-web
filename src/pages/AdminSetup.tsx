@@ -17,6 +17,8 @@ const AdminSetup = () => {
   
   const navigate = useNavigate();
 
+  const [mode, setMode] = useState<'create' | 'reset'>('create');
+
   const handleSetup = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -41,31 +43,48 @@ const AdminSetup = () => {
     setSuccess('');
     
     try {
-      // Sign up user baru
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email: email.trim(),
-        password: password,
-      });
-      
-      if (signUpError) {
-        console.error('Setup error:', signUpError);
-        setError(signUpError.message || 'Gagal membuat user admin');
-        return;
-      }
-      
-      if (data?.user) {
-        setSuccess(`User admin berhasil dibuat! Email: ${email}`);
-        console.log('Admin user created:', data.user.email);
+      if (mode === 'reset') {
+        // Reset password untuk user yang sudah ada
+        const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+          redirectTo: window.location.origin + '/admin/login',
+        });
         
-        // Clear form
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+        if (resetError) {
+          console.error('Reset error:', resetError);
+          setError(resetError.message || 'Gagal mengirim reset password');
+          return;
+        }
         
-        // Auto redirect ke login setelah 3 detik
-        setTimeout(() => {
-          navigate('/admin/login');
-        }, 3000);
+        setSuccess(`Email reset password sudah dikirim ke ${email}. Cek inbox/spam folder.`);
+      } else {
+        // Sign up user baru
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email: email.trim(),
+          password: password,
+        });
+        
+        if (signUpError) {
+          console.error('Setup error:', signUpError);
+          
+          // Kalau user sudah ada, suggest reset password
+          if (signUpError.message.includes('already registered') || signUpError.message.includes('already exists')) {
+            setError('User sudah terdaftar. Gunakan mode "Reset Password" atau login dengan password yang benar.');
+            setMode('reset');
+          } else {
+            setError(signUpError.message || 'Gagal membuat user admin');
+          }
+          return;
+        }
+        
+        if (data?.user) {
+          setSuccess(`User admin berhasil dibuat! Email: ${email}`);
+          console.log('Admin user created:', data.user.email);
+          
+          // Auto redirect ke login setelah 3 detik
+          setTimeout(() => {
+            navigate('/admin/login');
+          }, 3000);
+        }
       }
     } catch (err: any) {
       console.error('Setup exception:', err);
@@ -100,6 +119,40 @@ const AdminSetup = () => {
 
         {/* Form Card */}
         <div className="bg-white rounded-2xl shadow-xl p-8">
+          {/* Mode Toggle */}
+          <div className="flex rounded-lg bg-gray-100 p-1 mb-6">
+            <button
+              type="button"
+              onClick={() => setMode('create')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                mode === 'create' 
+                  ? 'bg-white text-primary shadow-sm' 
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Buat User Baru
+            </button>
+            <button
+              type="button"
+              onClick={() => setMode('reset')}
+              className={`flex-1 py-2 px-4 rounded-md text-sm font-medium transition-colors ${
+                mode === 'reset' 
+                  ? 'bg-white text-primary shadow-sm' 
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              Reset Password
+            </button>
+          </div>
+
+          {mode === 'reset' && (
+            <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-800">
+                Mode Reset Password: Klik tombol di bawah untuk kirim email reset password ke <strong>{email}</strong>
+              </p>
+            </div>
+          )}
+
           {error && (
             <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
@@ -178,17 +231,30 @@ const AdminSetup = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className={`w-full py-3 font-medium rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-2 ${
+                mode === 'reset' 
+                  ? 'bg-orange-500 text-white hover:bg-orange-600' 
+                  : 'bg-primary text-white hover:bg-primary/90'
+              }`}
             >
               {loading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  Membuat User...
+                  {mode === 'reset' ? 'Mengirim Email...' : 'Membuat User...'}
                 </>
               ) : (
                 <>
-                  <UserPlus className="w-5 h-5" />
-                  Buat Admin User
+                  {mode === 'reset' ? (
+                    <>
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                      Kirim Reset Password
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="w-5 h-5" />
+                      Buat Admin User
+                    </>
+                  )}
                 </>
               )}
             </button>
