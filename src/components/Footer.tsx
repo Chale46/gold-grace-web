@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
-import { supabase } from "@/lib/supabase";
-import { createSafeHTML } from "@/utils/xsProtection";
+import useSiteContent from "@/hooks/useSiteContent";
 import jadtraLogo from "@/assets/jadtra-logo.jpg";
 
 interface SiteContent {
@@ -31,24 +29,7 @@ interface SiteContent {
 const Footer = () => {
   const { t } = useLanguage();
   const { theme } = useTheme();
-  const [content, setContent] = useState<SiteContent>({});
-
-  useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase
-        .from('site_content')
-        .select('*')
-
-      const map: SiteContent = {}
-      data.forEach(item => {
-        map[item.key as keyof SiteContent] = item.value
-      })
-
-      setContent(map)
-    }
-
-    load()
-  }, [])
+  const { content } = useSiteContent();
 
   const navItems = [
     { label: t("nav.home"), path: "/" },
@@ -100,7 +81,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t mt-12 pt-8 text-center text-xs border-border text-muted-foreground">
-          © {new Date().getFullYear()} {content.footer_company || 'JADTRA Consulting'}. {t("footer.rights")}
+          {content.footer_copyright || `© ${new Date().getFullYear()} JADTRA Consulting. ${t("footer.rights")}`}
         </div>
       </div>
     </footer>

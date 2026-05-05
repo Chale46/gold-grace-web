@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
 import {
   Briefcase, Calculator, Monitor, Settings, Award, ShieldCheck, TrendingUp,
   MessageSquare, Search, Rocket, BarChart3, Lock, Workflow, Handshake,
@@ -9,8 +8,7 @@ import Layout from "@/components/Layout";
 import FadeIn from "@/components/FadeIn";
 import SEO from "@/components/SEO";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { supabase } from "@/lib/supabase";
-import { createSafeHTML } from "@/utils/xsProtection";
+import useSiteContent from "@/hooks/useSiteContent";
 import { organizationSchema, localBusinessSchema, websiteSchema } from "@/utils/structuredData";
 
 interface SiteContent {
@@ -60,24 +58,7 @@ interface SiteContent {
 
 const Index = () => {
   const { t, lang } = useLanguage();
-  const [content, setContent] = useState<SiteContent>({});
-
-  useEffect(() => {
-    const load = async () => {
-      const { data } = await supabase
-        .from('site_content')
-        .select('*')
-
-      const map: SiteContent = {}
-      data.forEach(item => {
-        map[item.key as keyof SiteContent] = item.value
-      })
-
-      setContent(map)
-    }
-
-    load()
-  }, [])
+  const { content } = useSiteContent();
 
   const services = [
     { icon: Briefcase, title: t("home.services.business.title"), desc: t("home.services.business.desc") },
@@ -158,20 +139,20 @@ const Index = () => {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                  <div className="text-2xl font-bold">15+</div>
-                  <div className="text-sm text-muted-foreground">Years Experience</div>
+                  <div className="text-2xl font-bold">{content.stat_exp || '15+ Years Experience'}</div>
+                  <div className="text-sm text-muted-foreground">Experience</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">500+</div>
-                  <div className="text-sm text-muted-foreground">Clients Served</div>
+                  <div className="text-2xl font-bold">{content.stat_clients || '500+ Clients Served'}</div>
+                  <div className="text-sm text-muted-foreground">Clients</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">98%</div>
-                  <div className="text-sm text-muted-foreground">Client Satisfaction</div>
+                  <div className="text-2xl font-bold">{content.stat_satisfaction || '98% Client Satisfaction'}</div>
+                  <div className="text-sm text-muted-foreground">Satisfaction</div>
                 </div>
                 <div>
-                  <div className="text-2xl font-bold">24/7</div>
-                  <div className="text-sm text-muted-foreground">Support Available</div>
+                  <div className="text-2xl font-bold">{content.stat_support || '24/7 Support Available'}</div>
+                  <div className="text-sm text-muted-foreground">Support</div>
                 </div>
               </div>
             </div>

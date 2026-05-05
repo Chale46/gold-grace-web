@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Sun, Moon, Globe } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useTheme } from "@/contexts/ThemeContext";
+import useSiteContent from "@/hooks/useSiteContent";
 import jadtraLogo from "@/assets/jadtra-logo.jpg";
 
 const Header = () => {
@@ -11,14 +12,15 @@ const Header = () => {
   const location = useLocation();
   const { lang, setLang, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
+  const { content } = useSiteContent();
 
   const navItems = [
-    { name: t("nav.home"), path: "/" },
-    { name: t("nav.about"), path: "/about" },
-    { name: t("nav.services"), path: "/services" },
-    { name: "Blog", path: "/blog" },
-    { name: t("taxCalculator"), path: "/tax-calculator" },
-    { name: t("nav.contact"), path: "/contact" },
+    { name: content.nav_home || t("nav.home"), path: "/" },
+    { name: content.nav_about || t("nav.about"), path: "/about" },
+    { name: content.nav_services || t("nav.services"), path: "/services" },
+    { name: content.nav_blog || "Blog", path: "/blog" },
+    { name: content.nav_tax || t("taxCalculator"), path: "/tax-calculator" },
+    { name: content.nav_contact || t("nav.contact"), path: "/contact" },
   ];
 
   useEffect(() => {

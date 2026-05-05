@@ -45,27 +45,7 @@ const AdminContent = () => {
   const [success, setSuccess] = useState('');
   
   // Content state
-  const [content, setContent] = useState<TextContent>({
-    hero_title: '',
-    hero_subtitle: '',
-    footer_company: '',
-    footer_email: '',
-    footer_phone: '',
-    footer_address: '',
-    nav_home: '',
-    nav_about: '',
-    nav_services: '',
-    nav_contact: '',
-    contact_email: '',
-    contact_phone: '',
-    contact_address: '',
-    social_linkedin: '',
-    social_facebook: '',
-    social_instagram: '',
-    company_name: '',
-    company_tagline: '',
-    company_description: ''
-  });
+  const [form, setForm] = useState<Record<string, string>>({});
 
   useEffect(() => {
     loadContent();
@@ -85,9 +65,9 @@ const AdminContent = () => {
       } else {
         // Parse content into state using text-based keys
         data?.forEach((item: SiteContent) => {
-          setContent(prev => ({
+          setForm(prev => ({
             ...prev,
-            [item.key as keyof TextContent]: item.value || ''
+            [item.key]: item.value || ''
           }));
         });
       }
@@ -105,15 +85,12 @@ const AdminContent = () => {
     setSuccess('');
 
     try {
-      // Convert content object to array of key-value pairs
-      const contentArray = Object.entries(content).map(([key, value]) => ({
-        key,
-        value: value || ''
-      }));
+      // Convert form object to array of key-value pairs
+      const payload = Object.entries(form).map(([key, value]) => ({ key, value }));
 
       const { data, error } = await supabase
         .from('site_content')
-        .upsert(contentArray, {
+        .upsert(payload, {
           onConflict: 'key'
         })
         .select();
@@ -207,8 +184,8 @@ const AdminContent = () => {
               </label>
               <input
                 type="text"
-                value={content.hero_title || ''}
-                onChange={(e) => setContent(prev => ({ ...prev, hero_title: e.target.value }))}
+                value={form.hero_title || ''}
+                onChange={(e) => setForm(prev => ({ ...prev, hero_title: e.target.value }))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter hero title..."
               />
@@ -220,8 +197,8 @@ const AdminContent = () => {
                 <span className="text-gray-500 text-xs ml-2">(subtitle below main heading)</span>
               </label>
               <textarea
-                value={content.hero_subtitle || ''}
-                onChange={(e) => setContent(prev => ({ ...prev, hero_subtitle: e.target.value }))}
+                value={form.hero_subtitle || ''}
+                onChange={(e) => setForm(prev => ({ ...prev, hero_subtitle: e.target.value }))}
                 rows={3}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter hero subtitle..."
@@ -236,8 +213,8 @@ const AdminContent = () => {
               </label>
               <input
                 type="text"
-                value={content.footer_company || ''}
-                onChange={(e) => setContent(prev => ({ ...prev, footer_company: e.target.value }))}
+                value={form.footer_company || ''}
+                onChange={(e) => setForm(prev => ({ ...prev, footer_company: e.target.value }))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter company name..."
               />
@@ -250,8 +227,8 @@ const AdminContent = () => {
               </label>
               <input
                 type="email"
-                value={content.footer_email || ''}
-                onChange={(e) => setContent(prev => ({ ...prev, footer_email: e.target.value }))}
+                value={form.footer_email || ''}
+                onChange={(e) => setForm(prev => ({ ...prev, footer_email: e.target.value }))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter email..."
               />
@@ -264,8 +241,8 @@ const AdminContent = () => {
               </label>
               <input
                 type="tel"
-                value={content.footer_phone || ''}
-                onChange={(e) => setContent(prev => ({ ...prev, footer_phone: e.target.value }))}
+                value={form.footer_phone || ''}
+                onChange={(e) => setForm(prev => ({ ...prev, footer_phone: e.target.value }))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 placeholder="Enter phone number..."
               />
