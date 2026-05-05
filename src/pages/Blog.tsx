@@ -39,8 +39,7 @@ export default function Blog() {
   if (!articles.length) {
     return (
       <div style={{ padding: 24 }}>
-        <h2>No articles yet</h2>
-        <p>Create your first article from admin.</p>
+        <h2>No articles yet. Please add from admin.</h2>
       </div>
     )
   }

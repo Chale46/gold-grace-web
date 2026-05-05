@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { api } from '@/lib/api';
+import { supabase } from '@/lib/supabase';
 import { 
   Save, 
   X, 
@@ -131,10 +131,19 @@ const ArticleEditor = ({ article, onSave, onCancel, mode }: ArticleEditorProps) 
       let result;
       if (mode === 'create') {
         // Create new article
-        result = await api.articles.create(articleData);
+        result = await supabase
+          .from('articles')
+          .insert(articleData)
+          .select()
+          .single();
       } else {
         // Update existing article
-        result = await api.articles.update(article.id!, articleData);
+        result = await supabase
+          .from('articles')
+          .update(articleData)
+          .eq('id', article.id!)
+          .select()
+          .single();
       }
 
       if (result.error) throw result.error;

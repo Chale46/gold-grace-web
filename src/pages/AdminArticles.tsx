@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/lib/api';
+import { supabase } from '@/lib/supabase';
 import ArticleEditor from '@/components/ArticleEditor';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { 
@@ -93,7 +93,10 @@ const AdminArticles = () => {
     
     setDeleting(articleId);
     try {
-      const { error } = await api.articles.delete(articleId);
+      const { error } = await supabase
+        .from('articles')
+        .delete()
+        .eq('id', articleId);
 
       if (error) throw error;
 
