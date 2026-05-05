@@ -7,7 +7,7 @@ import { Eye, EyeOff, Loader2, UserPlus, AlertCircle, CheckCircle } from 'lucide
 // HAPUS FILE INI SETELAH USER ADMIN BERHASIL DIBUAT!
 
 const AdminSetup = () => {
-  const [email, setEmail] = useState('jadtraconsulting@gmail.com');
+  const [email, setEmail] = useState('admin@jadtra.com');
   const [password, setPassword] = useState('Jadtra123!!');
   const [confirmPassword, setConfirmPassword] = useState('Jadtra123!!');
   const [showPassword, setShowPassword] = useState(false);
