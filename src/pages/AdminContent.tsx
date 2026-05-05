@@ -16,6 +16,28 @@ interface SiteContent {
   updated_at: string;
 }
 
+interface TextContent {
+  hero_title?: string;
+  hero_subtitle?: string;
+  footer_company?: string;
+  footer_email?: string;
+  footer_phone?: string;
+  footer_address?: string;
+  nav_home?: string;
+  nav_about?: string;
+  nav_services?: string;
+  nav_contact?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  contact_address?: string;
+  social_linkedin?: string;
+  social_facebook?: string;
+  social_instagram?: string;
+  company_name?: string;
+  company_tagline?: string;
+  company_description?: string;
+}
+
 const AdminContent = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -23,9 +45,27 @@ const AdminContent = () => {
   const [success, setSuccess] = useState('');
   
   // Content state
-  const [header, setHeader] = useState('');
-  const [body, setBody] = useState('');
-  const [footer, setFooter] = useState('');
+  const [content, setContent] = useState<TextContent>({
+    hero_title: '',
+    hero_subtitle: '',
+    footer_company: '',
+    footer_email: '',
+    footer_phone: '',
+    footer_address: '',
+    nav_home: '',
+    nav_about: '',
+    nav_services: '',
+    nav_contact: '',
+    contact_email: '',
+    contact_phone: '',
+    contact_address: '',
+    social_linkedin: '',
+    social_facebook: '',
+    social_instagram: '',
+    company_name: '',
+    company_tagline: '',
+    company_description: ''
+  });
 
   useEffect(() => {
     loadContent();
@@ -43,19 +83,12 @@ const AdminContent = () => {
         console.error('Error loading content:', error);
         setError('Failed to load content from database');
       } else {
-        // Parse content into state using correct keys
+        // Parse content into state using text-based keys
         data?.forEach((item: SiteContent) => {
-          switch (item.key) {
-            case 'header_html':
-              setHeader(item.value || '');
-              break;
-            case 'homepage_content':
-              setBody(item.value || '');
-              break;
-            case 'footer_html':
-              setFooter(item.value || '');
-              break;
-          }
+          setContent(prev => ({
+            ...prev,
+            [item.key as keyof TextContent]: item.value || ''
+          }));
         });
       }
     } catch (err) {
@@ -66,23 +99,21 @@ const AdminContent = () => {
     }
   };
 
-  const sanitize = (html: string) =>
-  html.replace(/<script.*?>.*?<\/script>/gi, '')
-
-const handleSave = async () => {
+  const handleSave = async () => {
     setSaving(true);
     setError('');
     setSuccess('');
 
     try {
-      // Save all sections using proper upsert array format with sanitized values
+      // Convert content object to array of key-value pairs
+      const contentArray = Object.entries(content).map(([key, value]) => ({
+        key,
+        value: value || ''
+      }));
+
       const { data, error } = await supabase
         .from('site_content')
-        .upsert([
-          { key: 'header_html', value: sanitize(header) },
-          { key: 'homepage_content', value: sanitize(body) },
-          { key: 'footer_html', value: sanitize(footer) }
-        ], {
+        .upsert(contentArray, {
           onConflict: 'key'
         })
         .select();
@@ -168,43 +199,76 @@ const handleSave = async () => {
           )}
 
           <div className="space-y-6">
-            {/* Header Section */}
+            {/* Hero Section */}
             <div className="bg-white rounded-lg shadow p-6">
               <label className="block text-sm font-medium text-foreground mb-2">
-                Header Content
-                <span className="text-gray-500 text-xs ml-2">(shown at top of all pages)</span>
+                Hero Title
+                <span className="text-gray-500 text-xs ml-2">(main heading on homepage)</span>
               </label>
-              <RichEditor
-                value={header}
-                onChange={setHeader}
+              <input
+                type="text"
+                value={content.hero_title || ''}
+                onChange={(e) => setContent(prev => ({ ...prev, hero_title: e.target.value }))}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Enter hero title..."
               />
-              <p className="text-xs text-gray-500 mt-2">Rich text editor. Leave empty to use default header.</p>
             </div>
 
-            {/* Body Section */}
             <div className="bg-white rounded-lg shadow p-6">
               <label className="block text-sm font-medium text-foreground mb-2">
-                Body/Main Content
-                <span className="text-gray-500 text-xs ml-2">(main page content)</span>
+                Hero Subtitle
+                <span className="text-gray-500 text-xs ml-2">(subtitle below main heading)</span>
               </label>
-              <RichEditor
-                value={body}
-                onChange={setBody}
+              <textarea
+                value={content.hero_subtitle || ''}
+                onChange={(e) => setContent(prev => ({ ...prev, hero_subtitle: e.target.value }))}
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Enter hero subtitle..."
               />
-              <p className="text-xs text-gray-500 mt-2">Rich text editor. This content will be injected into the main content area.</p>
             </div>
 
             {/* Footer Section */}
             <div className="bg-white rounded-lg shadow p-6">
               <label className="block text-sm font-medium text-foreground mb-2">
-                Footer Content
-                <span className="text-gray-500 text-xs ml-2">(shown at bottom of all pages)</span>
+                Footer Company
+                <span className="text-gray-500 text-xs ml-2">(company name in footer)</span>
               </label>
-              <RichEditor
-                value={footer}
-                onChange={setFooter}
+              <input
+                type="text"
+                value={content.footer_company || ''}
+                onChange={(e) => setContent(prev => ({ ...prev, footer_company: e.target.value }))}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Enter company name..."
               />
-              <p className="text-xs text-gray-500 mt-2">Rich text editor. Leave empty to use default footer.</p>
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6">
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Footer Email
+                <span className="text-gray-500 text-xs ml-2">(contact email)</span>
+              </label>
+              <input
+                type="email"
+                value={content.footer_email || ''}
+                onChange={(e) => setContent(prev => ({ ...prev, footer_email: e.target.value }))}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Enter email..."
+              />
+            </div>
+
+            <div className="bg-white rounded-lg shadow p-6">
+              <label className="block text-sm font-medium text-foreground mb-2">
+                Footer Phone
+                <span className="text-gray-500 text-xs ml-2">(contact phone)</span>
+              </label>
+              <input
+                type="tel"
+                value={content.footer_phone || ''}
+                onChange={(e) => setContent(prev => ({ ...prev, footer_phone: e.target.value }))}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Enter phone number..."
+              />
             </div>
           </div>
 

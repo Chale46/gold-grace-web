@@ -14,10 +14,25 @@ import { createSafeHTML } from "@/utils/xsProtection";
 import { organizationSchema, localBusinessSchema, websiteSchema } from "@/utils/structuredData";
 
 interface SiteContent {
-  header_html?: string;
-  homepage_content?: string;
-  footer_html?: string;
-  site_title?: string;
+  hero_title?: string;
+  hero_subtitle?: string;
+  footer_company?: string;
+  footer_email?: string;
+  footer_phone?: string;
+  footer_address?: string;
+  nav_home?: string;
+  nav_about?: string;
+  nav_services?: string;
+  nav_contact?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  contact_address?: string;
+  social_linkedin?: string;
+  social_facebook?: string;
+  social_instagram?: string;
+  company_name?: string;
+  company_tagline?: string;
+  company_description?: string;
 }
 
 const Index = () => {
@@ -97,14 +112,10 @@ const Index = () => {
                 Trusted by 500+ Companies
               </p>
               <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-tight text-foreground mb-8 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent drop-shadow-lg">
-                <div dangerouslySetInnerHTML={{
-                  __html: createSafeHTML(content.header_html, 'Trusted Consulting Partner for Business Growth')
-                }} />
+                {content.hero_title || 'Trusted Consulting Partner for Business Growth'}
               </h1>
               <p className="text-lg text-muted-foreground mb-10 max-w-3xl mx-auto">
-                <div dangerouslySetInnerHTML={{
-                  __html: createSafeHTML(content.homepage_content, 'Professional consulting services in business, taxation, and digital systems delivering certainty, growth, and sustainability.')
-                }} />
+                {content.hero_subtitle || 'Professional consulting services in business, taxation, and digital systems delivering certainty, growth, and sustainability.'}
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">

@@ -7,10 +7,25 @@ import { createSafeHTML } from "@/utils/xsProtection";
 import jadtraLogo from "@/assets/jadtra-logo.jpg";
 
 interface SiteContent {
-  header_html?: string;
-  homepage_content?: string;
-  footer_html?: string;
-  site_title?: string;
+  hero_title?: string;
+  hero_subtitle?: string;
+  footer_company?: string;
+  footer_email?: string;
+  footer_phone?: string;
+  footer_address?: string;
+  nav_home?: string;
+  nav_about?: string;
+  nav_services?: string;
+  nav_contact?: string;
+  contact_email?: string;
+  contact_phone?: string;
+  contact_address?: string;
+  social_linkedin?: string;
+  social_facebook?: string;
+  social_instagram?: string;
+  company_name?: string;
+  company_tagline?: string;
+  company_description?: string;
 }
 
 const Footer = () => {
@@ -85,9 +100,7 @@ const Footer = () => {
           </div>
         </div>
         <div className="border-t mt-12 pt-8 text-center text-xs border-border text-muted-foreground">
-          <div dangerouslySetInnerHTML={{
-            __html: createSafeHTML(content.footer_html, `© ${new Date().getFullYear()} JADTRA Consulting. ${t("footer.rights")}`)
-          }} />
+          © {new Date().getFullYear()} {content.footer_company || 'JADTRA Consulting'}. {t("footer.rights")}
         </div>
       </div>
     </footer>
