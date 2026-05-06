@@ -1,6 +1,19 @@
-import { ReactNode, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { api } from '@/lib/api';
+import { useState, useEffect, ReactNode } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+import { 
+  Home, 
+  FileText, 
+  Settings, 
+  Mail, 
+  Calculator,
+  LogOut,
+  Menu,
+  X,
+  User,
+  Shield,
+  Database
+} from 'lucide-react';
 import AdminSidebar from './AdminSidebar';
 import { Loader2 } from 'lucide-react';
 
@@ -16,7 +29,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   useEffect(() => {
     const getCurrentUser = async () => {
       try {
-        const { session, error } = await api.auth.getCurrentSession();
+        const { data: { session }, error } = await supabase.auth.getSession();
         
         if (session?.user) {
           setUser(session.user);
@@ -34,7 +47,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     getCurrentUser();
 
     // Listen for auth changes
-    const { data: { subscription } } = api.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser(session.user);
       } else {
@@ -47,7 +60,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
   const handleLogout = async () => {
     try {
-      await api.auth.signOut();
+      await supabase.auth.signOut();
       navigate('/admin/login');
     } catch (error) {
       console.error('Logout error:', error);

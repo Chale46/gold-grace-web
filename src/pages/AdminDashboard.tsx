@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { api } from '@/lib/api';
+import { supabase } from '@/lib/supabase';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { 
   MessageSquare, 
@@ -32,13 +32,25 @@ const AdminDashboard = () => {
     const loadDashboardData = async () => {
       try {
         // Load recent articles
-        const { data: articles, error: articlesError } = await api.articles.getAll({ limit: 5 });
+        const { data: articles, error: articlesError } = await supabase
+          .from('articles')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(5);
 
         // Load recent contacts
-        const { data: contacts, error: contactsError } = await api.contacts.getAll({ limit: 5 });
+        const { data: contacts, error: contactsError } = await supabase
+          .from('contacts')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(5);
 
         // Load recent calculations
-        const { data: calculations, error: calculationsError } = await api.taxCalculator.getAll({ limit: 5 });
+        const { data: calculations, error: calculationsError } = await supabase
+          .from('tax_calculations')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(5);
 
         if (!articlesError && articles) {
           setStats(prev => ({
