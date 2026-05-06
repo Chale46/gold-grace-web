@@ -17,8 +17,16 @@ alter table articles add column if not exists author_id uuid;
 alter table articles add column if not exists author text;
 
 -- Add proper constraints
-alter table articles add constraint if not exists articles_status_check 
-  check (status in ('draft', 'published', 'archived'));
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint 
+    where conname = 'articles_status_check'
+  ) then
+    alter table articles add constraint articles_status_check 
+      check (status in ('draft', 'published', 'archived'));
+  end if;
+end $$;
 
 -- Update existing records with safe defaults
 update articles set 
