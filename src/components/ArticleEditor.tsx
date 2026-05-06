@@ -91,8 +91,11 @@ const ArticleEditor = ({ article, onSave, onCancel, mode }: ArticleEditorProps) 
     setError('');
 
     try {
-      // Use API layer for image upload
-      const { data, error } = await api.storage.uploadArticleImage(file);
+      // Use Supabase storage for image upload
+      const fileName = `${Date.now()}-${file.name}`;
+      const { data, error } = await supabase.storage
+        .from('article-images')
+        .upload(fileName, file);
 
       if (error) throw error;
 
@@ -122,9 +125,18 @@ const ArticleEditor = ({ article, onSave, onCancel, mode }: ArticleEditorProps) 
         throw new Error('Title, content, and slug are required');
       }
 
-      // Prepare article data
+      // Prepare article data with proper defaults
       const articleData = {
-        ...formData,
+        title: formData.title || '',
+        excerpt: formData.excerpt || '',
+        content: formData.content || '',
+        featured_image_url: formData.featured_image_url || '',
+        slug: formData.slug || '',
+        meta_title: formData.meta_title || '',
+        meta_description: formData.meta_description || '',
+        is_featured: formData.is_featured || false,
+        status: formData.status || 'draft',
+        tags: formData.tags || [],
         published_at: formData.status === 'published' ? new Date().toISOString() : null
       };
 

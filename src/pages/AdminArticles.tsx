@@ -60,7 +60,10 @@ const AdminArticles = () => {
 
   const loadArticles = async () => {
     try {
-      const { data, error } = await api.articles.getAll();
+      const { data, error } = await supabase
+        .from('articles')
+        .select('*')
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error loading articles:', error);
