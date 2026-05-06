@@ -8,11 +8,21 @@ export default function BlogDetail() {
 
   useEffect(() => {
     const load = async () => {
-      const { data } = await supabase
-        .from('articles')
-        .select('*')
-        .or(`slug.eq.${slug},id.eq.${slug}`)
-        .single()
+      // SAFE UUID CHECK
+const isUUID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(slug)
+
+let query = supabase
+  .from('articles')
+  .select('*')
+
+if (isUUID) {
+  query = query.eq('id', slug)
+} else {
+  query = query.eq('slug', slug)
+}
+
+const { data, error } = await query.single()
 
       setArticle(data)
     }

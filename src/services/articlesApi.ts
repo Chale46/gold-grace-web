@@ -34,11 +34,21 @@ export const articlesApi = {
 
   // READ BY ID/SLUG
   getById: async (idOrSlug: string) => {
-    const { data, error } = await supabase
-      .from('articles')
-      .select('*')
-      .or(`slug.eq.${idOrSlug},id.eq.${idOrSlug}`)
-      .single()
+    // SAFE UUID CHECK
+const isUUID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(idOrSlug)
+
+let query = supabase
+  .from('articles')
+  .select('*')
+
+if (isUUID) {
+  query = query.eq('id', idOrSlug)
+} else {
+  query = query.eq('slug', idOrSlug)
+}
+
+const { data, error } = await query.single()
     
     return { data, error }
   },
