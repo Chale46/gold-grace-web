@@ -35,8 +35,8 @@ export default defineConfig(({ mode }) => ({
     sourcemap: mode === 'development',
     // Optimize chunks
     chunkSizeWarningLimit: 1000,
-    // Generate manifest for PWA
-    manifest: true,
+    // TEMP: Disable PWA manifest generation to prevent console warnings
+    // manifest: true,
   },
   // SEO optimization
   define: {
