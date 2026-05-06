@@ -13,13 +13,24 @@ values (
 )
 on conflict (id) do nothing;
 
--- Enable RLS on storage.objects
-alter table storage.objects enable row level security;
+-- Enable RLS on storage.objects (only if not already enabled)
+do $$
+begin
+  if not exists (
+    select 1 from pg_tables 
+    where tablename = 'objects' 
+    and schemaname = 'storage'
+    and rowsecurity = true
+  ) then
+    alter table storage.objects enable row level security;
+  end if;
+end $$;
 
 -- Drop existing policies if they exist
 drop policy if exists "Public Access article-images" on storage.objects;
 drop policy if exists "Authenticated Upload article-images" on storage.objects;
 drop policy if exists "Authenticated Update article-images" on storage.objects;
+drop policy if exists "Authenticated Delete article-images" on storage.objects;
 
 -- Create RLS policies for article-images bucket
 -- Public read access
