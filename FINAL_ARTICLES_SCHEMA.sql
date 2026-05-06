@@ -15,6 +15,8 @@ alter table articles add column if not exists updated_at timestamp default now()
 alter table articles add column if not exists view_count integer default 0;
 alter table articles add column if not exists author_id uuid;
 alter table articles add column if not exists author text;
+alter table articles add column if not exists read_time integer default 5;
+alter table articles add column if not exists og_image_url text;
 
 -- Add proper constraints (manual check needed)
 -- alter table articles add constraint articles_status_check 
@@ -32,8 +34,10 @@ update articles set
   meta_title = coalesce(meta_title, title),
   meta_description = coalesce(meta_description, left(content, 160)),
   updated_at = coalesce(updated_at, created_at),
-  view_count = coalesce(view_count, 0)
-where status is null or published_at is null or tags is null or meta_title is null or meta_description is null or updated_at is null or view_count is null;
+  view_count = coalesce(view_count, 0),
+  read_time = coalesce(read_time, 5),
+  og_image_url = coalesce(og_image_url, featured_image_url)
+where status is null or published_at is null or tags is null or meta_title is null or meta_description is null or updated_at is null or view_count is null or read_time is null or og_image_url is null;
 
 -- Create indexes for performance
 create index if not exists idx_articles_status on articles(status);
