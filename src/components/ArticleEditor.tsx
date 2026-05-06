@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
 import { Article, ArticleFormData } from '@/types/Article';
+import { compressImage, validateImageFile, createCompressedFile } from '@/utils/imageCompression';
 import { 
   Save, 
   X, 
@@ -71,15 +72,26 @@ const ArticleEditor = ({ article, onSave, onCancel, mode }: ArticleEditorProps) 
     const file = event.target.files?.[0];
     if (!file) return;
 
+    // Validate file first
+    const validation = validateImageFile(file);
+    if (!validation.isValid) {
+      setError(validation.errors.join(', '));
+      return;
+    }
+
     setUploading(true);
     setError('');
 
     try {
-      // Use Supabase storage for image upload
-      const fileName = `${Date.now()}-${file.name}`;
+      // Compress image while maintaining quality
+      const compressedBlob = await compressImage(file, 1200, 0.8);
+      const compressedFile = await createCompressedFile(file, compressedBlob);
+
+      // Use Supabase storage for compressed image upload
+      const fileName = `compressed_${Date.now()}_${file.name}`;
       const { data, error } = await supabase.storage
         .from('article-images')
-        .upload(fileName, file);
+        .upload(fileName, compressedFile);
 
       if (error) throw error;
 
@@ -89,7 +101,7 @@ const ArticleEditor = ({ article, onSave, onCancel, mode }: ArticleEditorProps) 
         og_image_url: data.publicUrl
       }));
 
-      setSuccess('Image uploaded successfully!');
+      setSuccess('Image compressed and uploaded successfully!');
     } catch (error) {
       console.error('Upload error:', error);
       setError('Failed to upload image');
