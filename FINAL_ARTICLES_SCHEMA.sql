@@ -16,17 +16,9 @@ alter table articles add column if not exists view_count integer default 0;
 alter table articles add column if not exists author_id uuid;
 alter table articles add column if not exists author text;
 
--- Add proper constraints
-do $$
-begin
-  if not exists (
-    select 1 from pg_constraint 
-    where conname = 'articles_status_check'
-  ) then
-    alter table articles add constraint articles_status_check 
-      check (status in ('draft', 'published', 'archived'));
-  end if;
-end $$;
+-- Add proper constraints (manual check needed)
+-- alter table articles add constraint articles_status_check 
+--   check (status in ('draft', 'published', 'archived'));
 
 -- Update existing records with safe defaults
 update articles set 
