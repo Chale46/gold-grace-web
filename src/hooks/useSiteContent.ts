@@ -27,7 +27,14 @@ export default function useSiteContent() {
     // optional realtime (nice for demo)
     const ch = supabase
       .channel('site_content')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'site_content' }, load)
+      .on('postgres_changes', { 
+        event: '*', 
+        schema: 'public', 
+        table: 'site_content' 
+      }, (payload) => {
+        console.log('Realtime update:', payload)
+        load() // Reload content when changes occur
+      })
       .subscribe()
 
     return () => { supabase.removeChannel(ch) }
