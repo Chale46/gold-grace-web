@@ -82,21 +82,21 @@ export default function Blog() {
         description="Business insights, tax tips, and consulting expertise from JADTRA Consulting team"
       />
       
-      {/* Blog Header */}
-      <section className="section-padding relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-blue-500/5 to-amber-500/5" />
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-gradient-to-br from-primary/20 via-primary/10 to-primary/5 blur-3xl -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+      {/* Blog Header - Refined Compact Hero */}
+      <section className="py-12 md:py-16 lg:py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-blue-500/3 to-amber-500/3" />
+        <div className="absolute top-0 right-0 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-primary/15 via-primary/8 to-primary/3 blur-2xl -translate-y-1/3 translate-x-1/4 pointer-events-none" />
         <div className="container-narrow relative">
           <FadeIn>
-            <div className="text-center max-w-4xl mx-auto">
-              <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-6">
-                <div className="w-3 h-3 bg-primary rounded-full animate-pulse" />
-                <span className="text-sm font-medium text-primary">Insights & Articles</span>
+            <div className="text-center max-w-3xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md border border-white/20 rounded-full mb-4">
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+                <span className="text-xs font-medium text-primary uppercase tracking-wider">Insights & Articles</span>
               </div>
-              <h1 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-8">
+              <h1 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6">
                 Blog
               </h1>
-              <p className="text-lg text-muted-foreground mb-12 max-w-3xl mx-auto">
+              <p className="text-base md:text-lg text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
                 Expert insights on business consulting, tax advisory, and digital transformation from our experienced team.
               </p>
             </div>
