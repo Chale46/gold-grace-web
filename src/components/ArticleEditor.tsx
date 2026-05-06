@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabase';
+import { Article, ArticleFormData } from '@/types/Article';
 import { 
   Save, 
   X, 
@@ -14,23 +15,6 @@ import {
   CheckCircle,
   Loader2
 } from 'lucide-react';
-
-interface Article {
-  id?: string;
-  title: string;
-  slug: string;
-  content: string;
-  excerpt: string;
-  featured_image_url?: string;
-  status: 'draft' | 'published' | 'archived';
-  published_at?: string;
-  read_time: number;
-  tags: string[];
-  meta_title?: string;
-  meta_description?: string;
-  og_image_url?: string;
-  is_featured: boolean;
-}
 
 interface ArticleEditorProps {
   article?: Article;
