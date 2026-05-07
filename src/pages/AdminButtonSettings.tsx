@@ -16,7 +16,7 @@ const AdminButtonSettings = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [form, setForm] = useState({
-    consultation_phone: '',
+    consultation_email: '',
     consultation_whatsapp: '',
   });
 
@@ -30,14 +30,14 @@ const AdminButtonSettings = () => {
       const { data, error } = await supabase
         .from('site_content')
         .select('*')
-        .in('key', ['consultation_phone', 'consultation_whatsapp']);
+        .in('key', ['consultation_email', 'consultation_whatsapp']);
 
       if (error) {
         console.error('Error loading button settings:', error);
         setError('Failed to load button settings');
       } else {
         const values: Record<string, string> = {
-          consultation_phone: '',
+          consultation_email: '',
           consultation_whatsapp: '',
         };
 
@@ -99,7 +99,7 @@ const AdminButtonSettings = () => {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Pengaturan Kontak</h1>
-            <p className="text-gray-500 mt-1">Ubah nomor telepon dan WhatsApp untuk tombol konsultasi mengambang.</p>
+            <p className="text-gray-500 mt-1">Ubah alamat email dan WhatsApp untuk tombol konsultasi mengambang.</p>
           </div>
           <button
             onClick={handleSave}
@@ -144,16 +144,16 @@ const AdminButtonSettings = () => {
               <div className="flex items-center gap-3 mb-4">
                 <Phone className="w-6 h-6 text-primary" />
                 <div>
-                  <h2 className="text-lg font-semibold text-foreground">Phone Number</h2>
-                  <p className="text-sm text-gray-500">This is the number used for the direct call action.</p>
+                  <h2 className="text-lg font-semibold text-foreground">Alamat Email</h2>
+                  <p className="text-sm text-gray-500">Email ini digunakan untuk aksi Hubungi Kami.</p>
                 </div>
               </div>
               <input
-                type="tel"
-                value={form.consultation_phone}
-                onChange={(e) => setForm(prev => ({ ...prev, consultation_phone: e.target.value }))}
+                type="email"
+                value={form.consultation_email}
+                onChange={(e) => setForm(prev => ({ ...prev, consultation_email: e.target.value }))}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="e.g. +6281234567890"
+                placeholder="e.g. info@jadtraconsulting.com"
               />
             </div>
 
@@ -175,11 +175,11 @@ const AdminButtonSettings = () => {
             </div>
 
             <div className="bg-blue-50 rounded-lg p-6 text-sm text-blue-800">
-              <p className="font-medium mb-2">How this works</p>
+              <p className="font-medium mb-2">Cara kerja</p>
               <ul className="list-disc list-inside space-y-1">
-                <li>If you enter a phone number, the button will use it for the phone call action.</li>
-                <li>If you enter a WhatsApp number, the chat button will open WhatsApp with the selected number.</li>
-                <li>Leave these fields blank to use the current app defaults.</li>
+                <li>Jika Anda mengisi alamat email, tombol Hubungi Kami akan membuka aplikasi email dengan alamat tersebut.</li>
+                <li>Jika Anda mengisi nomor WhatsApp, tombol akan membuka WhatsApp dengan nomor yang dipilih.</li>
+                <li>Kosongkan jika ingin menggunakan alamat email default.</li>
               </ul>
             </div>
           </div>
