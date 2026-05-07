@@ -6,6 +6,12 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '@/lib/supabase';
 
+interface StrategyPhoto {
+  id: string;
+  url: string;
+  order: number;
+}
+
 interface SiteContentData {
   header_html?: string;
   homepage_content?: string;
@@ -19,6 +25,7 @@ interface SiteContentData {
 
 interface SiteContentContextType {
   content: SiteContentData;
+  strategyPhotos: StrategyPhoto[];
   loading: boolean;
   error: string | null;
   refresh: () => Promise<void>;
@@ -40,6 +47,7 @@ interface SiteContentProviderProps {
 
 export const SiteContentProvider: React.FC<SiteContentProviderProps> = ({ children }) => {
   const [content, setContent] = useState<SiteContentData>({});
+  const [strategyPhotos, setStrategyPhotos] = useState<StrategyPhoto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -48,6 +56,7 @@ export const SiteContentProvider: React.FC<SiteContentProviderProps> = ({ childr
       setLoading(true);
       setError(null);
       
+      // Load site content
       const { data, error } = await supabase
         .from('site_content')
         .select('*')
@@ -66,6 +75,19 @@ export const SiteContentProvider: React.FC<SiteContentProviderProps> = ({ childr
       });
 
       setContent(contentMap);
+
+      // Load strategy photos
+      const { data: photosData, error: photosError } = await supabase
+        .from('strategy_photos')
+        .select('*')
+        .order('order', { ascending: true });
+
+      if (photosError) {
+        console.error('Error loading strategy photos:', photosError);
+        // Don't set error for photos, just leave empty
+      } else {
+        setStrategyPhotos(photosData || []);
+      }
     } catch (err) {
       console.error('Error loading site content:', err);
       setError('Failed to load site content');
@@ -83,7 +105,7 @@ export const SiteContentProvider: React.FC<SiteContentProviderProps> = ({ childr
   }, []);
 
   return (
-    <SiteContentContext.Provider value={{ content, loading, error, refresh }}>
+    <SiteContentContext.Provider value={{ content, strategyPhotos, loading, error, refresh }}>
       {children}
     </SiteContentContext.Provider>
   );

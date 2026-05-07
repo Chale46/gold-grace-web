@@ -23,6 +23,7 @@ import AdminDashboard from "./pages/AdminDashboard.tsx";
 import AdminArticles from "./pages/AdminArticles.tsx";
 import AdminContent from "./pages/AdminContent.tsx";
 import AdminButtonSettings from "./pages/AdminButtonSettings.tsx";
+import AdminStrategyPhotos from "./pages/AdminStrategyPhotos.tsx";
 import AdminSetup from "./pages/AdminSetup.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound.tsx";
@@ -71,6 +72,11 @@ const App = () => (
                       <Route path="/admin/articles" element={
                         <ProtectedRoute>
                           <AdminArticles />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin/strategy-photos" element={
+                        <ProtectedRoute>
+                          <AdminStrategyPhotos />
                         </ProtectedRoute>
                       } />
                       <Route path="*" element={<NotFound />} />

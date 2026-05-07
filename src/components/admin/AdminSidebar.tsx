@@ -4,6 +4,7 @@ import {
   FileText, 
   Settings, 
   Phone,
+  Image,
   LogOut,
   Menu,
   X,
@@ -24,6 +25,7 @@ const AdminSidebar = ({ user, onLogout }: AdminSidebarProps) => {
     { path: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/admin/articles', label: 'Articles', icon: FileText },
     { path: '/admin/settings', label: 'Pengaturan Kontak', icon: Phone },
+    { path: '/admin/strategy-photos', label: 'Foto Strategi', icon: Image },
     { path: '/admin/content', label: 'Site Content', icon: Settings },
   ];
 

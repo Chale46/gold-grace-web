@@ -7,8 +7,9 @@ import {
 import Layout from "@/components/Layout";
 import FadeIn from "@/components/FadeIn";
 import SEO from "@/components/SEO";
+import StrategyPhotoGallery from "@/components/StrategyPhotoGallery";
 import { useLanguage } from "@/contexts/LanguageContext";
-import useSiteContent from "@/hooks/useSiteContent";
+import { useSiteContent } from "@/components/SiteContentProvider";
 import { organizationSchema, localBusinessSchema, websiteSchema } from "@/utils/structuredData";
 
 interface SiteContent {
@@ -58,7 +59,7 @@ interface SiteContent {
 
 const Index = () => {
   const { t, lang } = useLanguage();
-  const { content } = useSiteContent();
+  const { content, strategyPhotos } = useSiteContent();
 
   const services = [
     { icon: Briefcase, title: t("home.services.business.title"), desc: t("home.services.business.desc") },
@@ -312,21 +313,7 @@ const Index = () => {
               </div>
             </FadeIn>
             <FadeIn delay={0.2}>
-              <div className="relative">
-                <div className="aspect-square relative">
-                  <div className="absolute inset-0 border-2 border-primary/20 rounded-sm rotate-3" />
-                  <div className="absolute inset-4 border-2 border-primary/30 rounded-sm -rotate-2" />
-                  <div className="absolute inset-8 bg-primary/5 rounded-sm flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                        <Target className="text-primary" size={32} strokeWidth={1.5} />
-                      </div>
-                      <p className="font-heading text-lg font-semibold text-foreground">{t("home.approach.graphic.title")}</p>
-                      <p className="text-muted-foreground text-sm mt-1">{t("home.approach.graphic.sub")}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <StrategyPhotoGallery photos={strategyPhotos} />
             </FadeIn>
           </div>
         </div>
