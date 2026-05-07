@@ -13,6 +13,8 @@ interface SiteContentData {
   site_title?: string;
   consultation_phone?: string;
   consultation_whatsapp?: string;
+  consultation_email?: string;
+  contact_email?: string;
 }
 
 interface SiteContentContextType {

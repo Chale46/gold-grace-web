@@ -10,11 +10,11 @@ const StickyConsultationButton = () => {
   const { t } = useLanguage();
   const { content } = useSiteContent();
 
-  const buildPhoneUrl = (value: string) => {
+  const buildMailToUrl = (value: string) => {
     const raw = value?.trim();
-    if (!raw) return 'tel:+622100000000';
-    if (raw.startsWith('tel:')) return raw;
-    return `tel:${raw}`;
+    const email = raw || 'info@jadtraconsulting.com';
+    if (email.startsWith('mailto:')) return email;
+    return `mailto:${email}`;
   };
 
   const buildWhatsAppUrl = (value: string) => {
@@ -41,7 +41,7 @@ const StickyConsultationButton = () => {
     {
       icon: Phone,
       label: t('consultationPhone') || 'Call Us',
-      action: buildPhoneUrl(content.consultation_phone || content.footer_phone || '+622100000000'),
+      action: buildMailToUrl(content.consultation_email || content.footer_email || content.contact_email || 'info@jadtraconsulting.com'),
       description: t('consultationPhoneDesc') || 'Direct consultation'
     },
     {
