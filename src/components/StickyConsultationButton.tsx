@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Phone, MessageCircle, X } from 'lucide-react';
+import { Mail, MessageCircle, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useSiteContent } from '@/components/SiteContentProvider';
@@ -39,7 +39,7 @@ const StickyConsultationButton = () => {
 
   const consultationOptions = [
     {
-      icon: Phone,
+      icon: Mail,
       label: t('consultationPhone') || 'Call Us',
       action: buildMailToUrl(content.consultation_email || content.footer_email || content.contact_email || 'info@jadtraconsulting.com'),
       description: t('consultationPhoneDesc') || 'Direct consultation'
@@ -110,7 +110,7 @@ const StickyConsultationButton = () => {
         {/* Hover Tooltip */}
         {!isOpen && (
           <div className="absolute bottom-full right-0 mb-2 px-3 py-1.5 bg-foreground text-background text-xs font-medium rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            {t('consultation.title') || 'Consultation'}
+            {t('consultation.title') || 'Hubungi Kami'}
           </div>
         )}
       </button>

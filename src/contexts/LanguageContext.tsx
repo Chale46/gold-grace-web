@@ -180,6 +180,7 @@ const translations: Record<string, Record<Lang, string>> = {
   "taxCalculatorDisclaimer": { en: "This calculator is for estimation and information purposes only. Calculation results may differ from actual conditions depending on specific income components, allowances, and company policies. For accurate and comprehensive calculations, consult with tax professionals from JADTRA Consulting.", id: "Kalkulator ini disediakan untuk estimasi dan informasi saja. Hasil perhitungan dapat berbeda dengan kondisi aktual bergantung pada komponen penghasilan, tunjangan, dan kebijakan perusahaan. Untuk perhitungan yang akurat dan komprehensif, konsultasikan dengan profesional pajak dari JADTRA Consulting." },
   "taxCalculatorAlert": { en: "This calculator is for PPh 21 estimation for permanent employees. Calculation results may differ depending on specific conditions and company policies.", id: "Kalkulator ini untuk estimasi PPh 21 pegawai tetap. Hasil perhitungan dapat berbeda tergantung kondisi spesifik dan kebijakan perusahaan." },
   "consultation": { en: "Consultation", id: "Konsultasi" },
+  "consultation.title": { en: "Hubungi Kami", id: "Hubungi Kami" },
   "consultationPhone": { en: "Call Us", id: "Hubungi Kami" },
   "consultationPhoneDesc": { en: "Direct consultation", id: "Konsultasi langsung" },
   "consultationWhatsapp": { en: "WhatsApp", id: "WhatsApp" },
