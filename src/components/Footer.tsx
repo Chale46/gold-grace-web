@@ -30,6 +30,9 @@ const Footer = () => {
   const { t } = useLanguage();
   const { theme } = useTheme();
   const { content } = useSiteContent();
+  const contactEmail = content.footer_email || content.contact_email || "info@jadtraconsulting.com";
+  const contactPhone = content.footer_phone || content.contact_phone || "+62 21 0000 0000";
+  const contactAddress = content.footer_location || content.footer_address || content.contact_address || "Jakarta, Indonesia";
 
   const navItems = [
     { label: t("nav.home"), path: "/" },
@@ -74,9 +77,9 @@ const Footer = () => {
               {t("footer.contact")}
             </h4>
             <div className="text-sm space-y-1 text-muted-foreground">
-              <p>info@jadtraconsulting.com</p>
-              <p>+62 21 0000 0000</p>
-              <p>Jakarta, Indonesia</p>
+              <p>{contactEmail}</p>
+              <p>{contactPhone}</p>
+              <p>{contactAddress}</p>
             </div>
           </div>
         </div>

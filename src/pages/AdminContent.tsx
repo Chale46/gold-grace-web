@@ -67,7 +67,7 @@ const AdminContent = () => {
         data?.forEach((item: SiteContent) => {
           setForm(prev => ({
             ...prev,
-            [item.key]: item.value || ''
+            [item.key]: (item as any).value ?? (item as any).content ?? ''
           }));
         });
       }
@@ -85,15 +85,27 @@ const AdminContent = () => {
     setSuccess('');
 
     try {
-      // Convert form object to array of key-value pairs
-      const payload = Object.entries(form).map(([key, value]) => ({ key, value }));
-
-      const { data, error } = await supabase
+      // Prefer modern "value" column, then fallback to legacy "content" schema.
+      const payloadValue = Object.entries(form).map(([key, value]) => ({ key, value }));
+      let { data, error } = await supabase
         .from('site_content')
-        .upsert(payload, {
+        .upsert(payloadValue, {
           onConflict: 'key'
         })
         .select();
+
+      if (error?.message?.toLowerCase().includes("column") && error.message.toLowerCase().includes("value")) {
+        const payloadContent = Object.entries(form).map(([key, value]) => ({ key, content: value }));
+        const fallbackResult = await supabase
+          .from('site_content')
+          .upsert(payloadContent, {
+            onConflict: 'key'
+          })
+          .select();
+
+        data = fallbackResult.data;
+        error = fallbackResult.error;
+      }
 
       if (error) {
         console.error('Save error:', error);
@@ -258,6 +270,34 @@ const AdminContent = () => {
               <li>Click "Preview Site" to see changes on the public website</li>
               <li>Don't forget to click "Save Changes" when done editing</li>
             </ul>
+          </div>
+
+          {/* Bottom Action Buttons */}
+          <div className="mt-8 flex justify-end gap-3 border-t border-gray-200 pt-6">
+            <button
+              onClick={handlePreview}
+              className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              <Eye className="w-4 h-4" />
+              Preview Site
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
+            >
+              {saving ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  Save Changes
+                </>
+              )}
+            </button>
           </div>
         </>
       )}

@@ -408,17 +408,34 @@ export const api = {
 
     // Update content (upsert)
     update: async (key, content) => {
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('site_content')
         .upsert({
           key,
-          content,
+          value: content,
           updated_at: new Date().toISOString()
         }, {
           onConflict: 'key'
         })
         .select()
         .single();
+
+      if (error?.message?.toLowerCase().includes('column') && error.message.toLowerCase().includes('value')) {
+        const fallback = await supabase
+          .from('site_content')
+          .upsert({
+            key,
+            content,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'key'
+          })
+          .select()
+          .single();
+
+        data = fallback.data;
+        error = fallback.error;
+      }
 
       return { data, error };
     },
@@ -434,7 +451,7 @@ export const api = {
       // Convert array to object keyed by key
       const contentMap = {};
       data?.forEach(item => {
-        contentMap[item.key] = item.content;
+        contentMap[item.key] = item.value ?? item.content ?? '';
       });
 
       return { data: contentMap, error: null };

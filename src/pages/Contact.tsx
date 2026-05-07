@@ -6,10 +6,15 @@ import { Mail, Phone, MapPin, Upload, X, FileText, CheckCircle, AlertCircle } fr
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useEmail } from "@/hooks/useEmail";
 import { useDrive } from "@/hooks/useDrive";
+import useSiteContent from "@/hooks/useSiteContent";
 import { localBusinessSchema, breadcrumbSchema } from "@/utils/structuredData";
 
 const Contact = () => {
   const { t } = useLanguage();
+  const { content } = useSiteContent();
+  const contactEmail = content.footer_email || content.contact_email || "info@jadtraconsulting.com";
+  const contactPhone = content.footer_phone || content.contact_phone || "+62 21 0000 0000";
+  const contactAddress = content.footer_location || content.footer_address || content.contact_address || "Jakarta, Indonesia";
   const [form, setForm] = useState({ name: "", email: "", phone: "", company: "", message: "" });
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [uploadResults, setUploadResults] = useState<{fileName: string, webViewLink: string}[]>([]);
@@ -57,10 +62,10 @@ const Contact = () => {
     ...localBusinessSchema,
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+62-21-0000-0000',
+      telephone: contactPhone,
       contactType: 'customer service',
       availableLanguage: ['English', 'Indonesian'],
-      email: 'info@jadtraconsulting.com',
+      email: contactEmail,
     },
   };
 
@@ -227,21 +232,21 @@ const Contact = () => {
                   <Mail className="text-primary mt-0.5" size={20} strokeWidth={1.5} />
                   <div>
                     <p className="text-sm font-medium text-foreground">{t("contact.office.email")}</p>
-                    <p className="text-sm text-muted-foreground">info@jadtraconsulting.com</p>
+                    <p className="text-sm text-muted-foreground">{contactEmail}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <Phone className="text-primary mt-0.5" size={20} strokeWidth={1.5} />
                   <div>
                     <p className="text-sm font-medium text-foreground">{t("contact.office.phone")}</p>
-                    <p className="text-sm text-muted-foreground">+62 21 0000 0000</p>
+                    <p className="text-sm text-muted-foreground">{contactPhone}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
                   <MapPin className="text-primary mt-0.5" size={20} strokeWidth={1.5} />
                   <div>
                     <p className="text-sm font-medium text-foreground">{t("contact.office.address")}</p>
-                    <p className="text-sm text-muted-foreground">Jakarta, Indonesia</p>
+                    <p className="text-sm text-muted-foreground">{contactAddress}</p>
                   </div>
                 </div>
               </div>

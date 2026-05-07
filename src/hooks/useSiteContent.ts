@@ -15,7 +15,7 @@ export default function useSiteContent() {
 
     if (!error && data) {
       const map: Map = {}
-      data.forEach((i: any) => (map[i.key] = i.value))
+      data.forEach((i: any) => (map[i.key] = i.value ?? i.content ?? ''))
       setContent(map)
     }
     setLoading(false)

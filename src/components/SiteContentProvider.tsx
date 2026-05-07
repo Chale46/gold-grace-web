@@ -58,7 +58,7 @@ export const SiteContentProvider: React.FC<SiteContentProviderProps> = ({ childr
       // Map data to object using the exact specified logic
       const contentMap: SiteContentData = {};
       data?.forEach((item) => {
-        contentMap[item.key] = item.value;
+        contentMap[item.key] = item.value ?? item.content ?? '';
       });
 
       setContent(contentMap);
