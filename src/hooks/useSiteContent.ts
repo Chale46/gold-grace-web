@@ -11,7 +11,8 @@ export default function useSiteContent() {
     setLoading(true)
     const { data, error } = await supabase
       .from('site_content')
-      .select('key,value')
+      // Support both schema variants: { key, value } or legacy { key, content }.
+      .select('key,value,content')
 
     if (!error && data) {
       const map: Map = {}
