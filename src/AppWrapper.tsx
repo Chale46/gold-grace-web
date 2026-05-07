@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import StickyConsultationButton from '@/components/StickyConsultationButton';
 import useAnalytics from '@/hooks/useAnalytics';
 import usePerformanceMonitoring from '@/hooks/usePerformanceMonitoring';
@@ -73,7 +72,6 @@ const AppWrapper = ({ children }: AppWrapperProps) => {
   return (
     <>
       {children}
-      <PWAInstallPrompt />
       <StickyConsultationButton />
     </>
   );
