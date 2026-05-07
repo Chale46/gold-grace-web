@@ -3,6 +3,7 @@ import {
   LayoutDashboard, 
   FileText, 
   Settings, 
+  Phone,
   LogOut,
   Menu,
   X,
@@ -22,6 +23,7 @@ const AdminSidebar = ({ user, onLogout }: AdminSidebarProps) => {
   const menuItems = [
     { path: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
     { path: '/admin/articles', label: 'Articles', icon: FileText },
+    { path: '/admin/settings', label: 'Pengaturan Kontak', icon: Phone },
     { path: '/admin/content', label: 'Site Content', icon: Settings },
   ];
 

@@ -22,6 +22,7 @@ import AdminLogin from "./pages/AdminLogin.tsx";
 import AdminDashboard from "./pages/AdminDashboard.tsx";
 import AdminArticles from "./pages/AdminArticles.tsx";
 import AdminContent from "./pages/AdminContent.tsx";
+import AdminButtonSettings from "./pages/AdminButtonSettings.tsx";
 import AdminSetup from "./pages/AdminSetup.tsx";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound.tsx";
@@ -60,6 +61,11 @@ const App = () => (
                       <Route path="/admin/content" element={
                         <ProtectedRoute>
                           <AdminContent />
+                        </ProtectedRoute>
+                      } />
+                      <Route path="/admin/settings" element={
+                        <ProtectedRoute>
+                          <AdminButtonSettings />
                         </ProtectedRoute>
                       } />
                       <Route path="/admin/articles" element={

@@ -7,8 +7,7 @@ import {
   Calculator,
   TrendingUp,
   Mail,
-  FileText,
-  Settings
+  FileText
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -274,10 +273,6 @@ const AdminDashboard = () => {
                 >
                   View Website
                 </Link>
-                <button className="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </button>
               </div>
             </div>
           </div>

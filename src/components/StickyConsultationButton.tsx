@@ -2,11 +2,30 @@ import { useState, useEffect } from 'react';
 import { Phone, MessageCircle, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useSiteContent } from '@/components/SiteContentProvider';
 
 const StickyConsultationButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const { t } = useLanguage();
+  const { content } = useSiteContent();
+
+  const buildPhoneUrl = (value: string) => {
+    const raw = value?.trim();
+    if (!raw) return 'tel:+622100000000';
+    if (raw.startsWith('tel:')) return raw;
+    return `tel:${raw}`;
+  };
+
+  const buildWhatsAppUrl = (value: string) => {
+    const raw = value?.trim();
+    const defaultUrl = 'https://wa.me/6281234567890?text=Hi%20JADTRA%20Consulting%2C%20I%20need%20tax%20consultation';
+    if (!raw) return defaultUrl;
+    if (raw.startsWith('http')) return raw;
+    const cleaned = raw.replace(/[^0-9]/g, '');
+    if (!cleaned) return defaultUrl;
+    return `https://wa.me/${cleaned}?text=Hi%20JADTRA%20Consulting%2C%20I%20need%20tax%20consultation`;
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,13 +41,13 @@ const StickyConsultationButton = () => {
     {
       icon: Phone,
       label: t('consultationPhone') || 'Call Us',
-      action: 'tel:+622100000000',
+      action: buildPhoneUrl(content.consultation_phone || content.footer_phone || '+622100000000'),
       description: t('consultationPhoneDesc') || 'Direct consultation'
     },
     {
       icon: MessageCircle,
       label: t('consultationWhatsapp') || 'WhatsApp',
-      action: 'https://wa.me/6281234567890?text=Hi%20JADTRA%20Consulting%2C%20I%20need%20tax%20consultation',
+      action: buildWhatsAppUrl(content.consultation_whatsapp || ''),
       description: t('consultationWhatsappDesc') || 'Chat with our experts'
     }
   ];

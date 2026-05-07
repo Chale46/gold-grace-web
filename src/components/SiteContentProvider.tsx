@@ -11,6 +11,8 @@ interface SiteContentData {
   homepage_content?: string;
   footer_html?: string;
   site_title?: string;
+  consultation_phone?: string;
+  consultation_whatsapp?: string;
 }
 
 interface SiteContentContextType {

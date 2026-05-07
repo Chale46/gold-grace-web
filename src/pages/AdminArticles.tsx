@@ -12,7 +12,6 @@ import {
   Eye, 
   Calendar,
   User,
-  Settings,
   Search,
   Filter,
   ChevronDown,
@@ -384,10 +383,6 @@ const AdminArticles = () => {
                 >
                   Dashboard
                 </Link>
-                <button className="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </button>
                 <Link
                   to="/"
                   className="flex items-center justify-center px-4 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
